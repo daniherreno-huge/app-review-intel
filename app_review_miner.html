@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>App Review Intel</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0f0f;
+    --bg2: #161616;
+    --bg3: #1e1e1e;
+    --border: #2a2a2a;
+    --border2: #333;
+    --text: #e8e8e0;
+    --text2: #888;
+    --text3: #555;
+    --accent: #c8f05a;
+    --accent2: #9ed63a;
+    --blue: #5ab4f0;
+    --red: #f05a5a;
+    --amber: #f0a85a;
+    --purple: #a85af0;
+    --teal: #5af0d4;
+    --font-mono: 'DM Mono', monospace;
+    --font-sans: 'DM Sans', sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .app {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-left h1 {
+    font-family: var(--font-mono);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .header-left p {
+    font-size: 13px;
+    color: var(--text2);
+    font-weight: 300;
+  }
+  .header-right {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text3);
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  /* App tabs */
+  .app-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .app-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg2);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text2);
+    user-select: none;
+  }
+  .app-tab:hover { border-color: var(--border2); color: var(--text); }
+  .app-tab.active { border-color: var(--accent); color: var(--accent); background: rgba(200,240,90,0.05); }
+  .app-tab .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+  .app-tab .count { font-size: 10px; opacity: 0.6; }
+
+  /* Input area */
+  .input-section {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: border-color 0.2s;
+  }
+  .input-section:focus-within { border-color: var(--border2); }
+  .input-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .input-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .input-hint { font-size: 11px; color: var(--text3); }
+  textarea {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 1.7;
+    padding: 14px;
+    resize: vertical;
+    min-height: 180px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  textarea::placeholder { color: var(--text3); }
+  textarea:focus { border-color: var(--border2); }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 32px;
+    align-items: center;
+  }
+  .btn-analyze {
+    padding: 10px 24px;
+    background: var(--accent);
+    color: #0f0f0f;
+    border: none;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.3px;
+  }
+  .btn-analyze:hover { background: var(--accent2); }
+  .btn-analyze:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-clear {
+    padding: 10px 16px;
+    background: transparent;
+    color: var(--text2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-clear:hover { border-color: var(--border2); color: var(--text); }
+  .status-msg {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text2);
+    flex: 1;
+  }
+  .status-msg.loading { color: var(--accent); }
+  .status-msg.error { color: var(--red); }
+
+  /* Results */
+  .results { display: none; }
+  .results.visible { display: block; }
+
+  /* Summary bar */
+  .summary-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .summary-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .summary-card .num {
+    font-family: var(--font-mono);
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .summary-card .lbl {
+    font-size: 11px;
+    color: var(--text2);
+    font-weight: 300;
+  }
+  .num-accent { color: var(--accent); }
+  .num-red { color: var(--red); }
+  .num-amber { color: var(--amber); }
+  .num-blue { color: var(--blue); }
+
+  /* Section heading */
+  .section-heading {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text3);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Themes grid */
+  .themes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .theme-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    transition: border-color 0.15s;
+    cursor: pointer;
+  }
+  .theme-card:hover { border-color: var(--border2); }
+  .theme-card.expanded { border-color: var(--accent); }
+  .theme-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .theme-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .theme-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .badge-critical { background: rgba(240,90,90,0.15); color: var(--red); border: 1px solid rgba(240,90,90,0.2); }
+  .badge-friction { background: rgba(240,168,90,0.15); color: var(--amber); border: 1px solid rgba(240,168,90,0.2); }
+  .badge-positive { background: rgba(200,240,90,0.1); color: var(--accent); border: 1px solid rgba(200,240,90,0.15); }
+  .badge-feature { background: rgba(90,180,240,0.1); color: var(--blue); border: 1px solid rgba(90,180,240,0.2); }
+  .badge-neutral { background: rgba(255,255,255,0.05); color: var(--text2); border: 1px solid var(--border); }
+  .theme-summary {
+    font-size: 12px;
+    color: var(--text2);
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+  .theme-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text3);
+  }
+  .theme-count::before { content: ''; }
+  .theme-reviews {
+    display: none;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .theme-reviews.visible { display: block; }
+  .review-item {
+    padding: 10px 12px;
+    background: var(--bg3);
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: var(--text2);
+    font-weight: 300;
+    line-height: 1.6;
+    border-left: 2px solid var(--border);
+  }
+  .review-item:last-child { margin-bottom: 0; }
+  .review-item .stars {
+    font-size: 10px;
+    margin-bottom: 4px;
+    color: var(--amber);
+    font-family: var(--font-mono);
+  }
+
+  /* Opportunities */
+  .opportunities {
+    margin-bottom: 32px;
+  }
+  .opportunity-item {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: border-color 0.15s;
+  }
+  .opportunity-item:hover { border-color: var(--border2); }
+  .opp-num {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--text3);
+    flex-shrink: 0;
+    width: 28px;
+    line-height: 1.3;
+  }
+  .opp-content {}
+  .opp-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  .opp-desc {
+    font-size: 12px;
+    color: var(--text2);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+  .opp-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-top: 8px;
+    background: rgba(90,180,240,0.1);
+    color: var(--blue);
+    border: 1px solid rgba(90,180,240,0.2);
+  }
+
+  /* Competitor note */
+  .competitor-note {
+    background: rgba(168,90,240,0.05);
+    border: 1px solid rgba(168,90,240,0.15);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 32px;
+  }
+  .competitor-note .cn-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--purple);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .competitor-note .cn-text {
+    font-size: 13px;
+    color: var(--text2);
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* Quote block */
+  .top-quotes {
+    margin-bottom: 32px;
+  }
+  .quote-item {
+    padding: 14px 16px;
+    border-left: 2px solid var(--accent);
+    background: var(--bg2);
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--text2);
+    font-weight: 300;
+    line-height: 1.7;
+  }
+  .quote-source {
+    font-style: normal;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--text3);
+    margin-top: 6px;
+  }
+
+  /* Loading spinner */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 1.5px solid var(--border2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+
+  /* Format guide */
+  .format-guide {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .format-guide summary {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text2);
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .format-guide summary::before {
+    content: '›';
+    font-size: 16px;
+    transition: transform 0.15s;
+    color: var(--text3);
+  }
+  .format-guide[open] summary::before { transform: rotate(90deg); }
+  .format-guide .guide-content {
+    margin-top: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text3);
+    line-height: 2;
+  }
+  .format-guide .eg {
+    background: var(--bg3);
+    border-radius: 4px;
+    padding: 10px 12px;
+    margin-top: 8px;
+    color: var(--text2);
+  }
+
+  @media (max-width: 600px) {
+    .summary-bar { grid-template-columns: repeat(2, 1fr); }
+    .themes-grid { grid-template-columns: 1fr; }
+    .header { flex-direction: column; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>// app review intel</h1>
+      <p>paste reviews → get themes, complaints, and product opportunities</p>
+    </div>
+    <div class="header-right">
+      <div id="run-date">—</div>
+      <div>weekly digest</div>
+    </div>
+  </div>
+
+  <!-- App selector -->
+  <div class="app-tabs">
+    <div class="app-tab active" data-app="vail" onclick="selectApp('vail', this)">
+      <span class="dot"></span> My Epic / Vail
+      <span class="count" id="count-vail"></span>
+    </div>
+    <div class="app-tab" data-app="ikon" onclick="selectApp('ikon', this)">
+      <span class="dot"></span> Ikon Pass
+      <span class="count" id="count-ikon"></span>
+    </div>
+    <div class="app-tab" data-app="other" onclick="selectApp('other', this)">
+      <span class="dot"></span> Other
+      <span class="count" id="count-other"></span>
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div class="input-section">
+    <div class="input-header">
+      <span class="input-label">Paste reviews</span>
+      <span class="input-hint">one review per line, or paste a block</span>
+    </div>
+    <textarea id="review-input" placeholder="Paste App Store or Google Play reviews here. 
+
+Each review on its own line works best, e.g:
+★★★☆☆ — The app crashes every time I try to load my pass at the lift. Really frustrating.
+★★☆☆☆ — Map is completely useless offline. No connectivity on the mountain = no map.
+★★★★★ — Love the new check-in feature. Super smooth this season.
+
+You can also paste a big block of text — the AI will figure it out."></textarea>
+  </div>
+
+  <!-- Format guide -->
+  <details class="format-guide">
+    <summary>How to get reviews fast</summary>
+    <div class="guide-content">
+      <div>iOS: go to App Store → search the app → scroll to Reviews → copy/paste</div>
+      <div>Google Play: same — open app page → Reviews section</div>
+      <div>Or use a tool like appfollow.io, sensor tower, or appbot for bulk export</div>
+      <div class="eg">
+        tip: filter by "Most Recent" or "Critical" before copying for highest signal
+      </div>
+    </div>
+  </details>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button class="btn-analyze" id="analyze-btn" onclick="analyzeReviews()">analyze reviews</button>
+    <button class="btn-clear" onclick="clearAll()">clear</button>
+    <span class="status-msg" id="status-msg"></span>
+  </div>
+
+  <!-- Results -->
+  <div class="results" id="results">
+
+    <div class="summary-bar">
+      <div class="summary-card">
+        <div class="num num-accent" id="res-total">—</div>
+        <div class="lbl">reviews analyzed</div>
+      </div>
+      <div class="summary-card">
+        <div class="num num-red" id="res-critical">—</div>
+        <div class="lbl">critical issues</div>
+      </div>
+      <div class="summary-card">
+        <div class="num num-amber" id="res-friction">—</div>
+        <div class="lbl">friction points</div>
+      </div>
+      <div class="summary-card">
+        <div class="num num-blue" id="res-opportunities">—</div>
+        <div class="lbl">product opportunities</div>
+      </div>
+    </div>
+
+    <div class="section-heading">themes</div>
+    <div class="themes-grid" id="themes-grid"></div>
+
+    <div class="section-heading">top opportunities</div>
+    <div class="opportunities" id="opportunities"></div>
+
+    <div id="competitor-section" style="display:none">
+      <div class="section-heading">competitive signal</div>
+      <div class="competitor-note" id="competitor-note"></div>
+    </div>
+
+    <div class="section-heading">user voice</div>
+    <div class="top-quotes" id="top-quotes"></div>
+
+  </div>
+
+</div>
+
+<script>
+const appData = {
+  vail: `★☆☆☆☆ | 2026-03-29 | Shiprek | doesn't work well on android, blanks out and doesn't load screens
+★☆☆☆☆ | 2026-03-28 | Andrew Mylander | App wont load pass. Usually takes forever to load my pass, often wont even load and I have to go to tge tucket window to get a physical one. once tge pass loads up it works fine but I usually have to close and reload the app multiple times before I get my pass to show up. Update: this problem has been so bad ive had to pay $5 to get a physical rfid card after I spent 20 trying to get the passon my phone and waiting in line. I have to delete and redownload the app any time i want to use it
+★☆☆☆☆ | 2026-03-28 | Andre Nathan | mostly broken rarely work
+★☆☆☆☆ | 2026-03-26 | Gypt | I paid 800$ for a half day of boarding.  Sucks
+★★☆☆☆ | 2026-03-24 | GPS | app gps tracking never works only stat i ever get is number of lifts . this function used to work couple years back
+★☆☆☆☆ | 2026-03-23 | Clunky and Unintuitive | Clunky and Unintuitive
+★★☆☆☆ | 2026-03-23 | Michael Mohns | super slow
+★☆☆☆☆ | 2026-03-23 | Jake Marston | Horrible app that barely functions.
+★☆☆☆☆ | 2026-03-23 | Kyle Stockhaus | takes forever to load. always changes my permissions and shuts off mobile pass
+★☆☆☆☆ | 2026-03-22 | Ryan | won't let me login. useless app.
+★☆☆☆☆ | 2026-03-22 | Marc Vanlerberghe | The app is incredibly slow to load and quite buggy. Very disappointing.
+★☆☆☆☆ | 2026-03-22 | Dalton Lentz | nice features, but super slow and buggy. barely functional.
+★☆☆☆☆ | 2026-03-21 | Very bad | Kept kicking me out of the app while trying to ski. Very disappointed for all the money spent here. I strongly don't recommend epic.
+★★★★★ | 2026-03-20 | Skier | Great app. Easy to access ski lift tickets, tracks stats, and gives advice for skiing. Extremely helpful for beginners but great for Intermediate and Pro too! So thankful for this app
+★☆☆☆☆ | 2026-03-19 | Apparently you need instagram for real time updates | They force us to download the epic app and tell us to check that for lift updates. But then they close the gondola and the liftie says we should've checked Instagram stories. Why wouldn't you just post the update in the app that everyone already has?
+★☆☆☆☆ | 2026-03-17 | Useless Trash | The app logs out and stops tracking, and requires me to reselect the resort I am at. The pass NEVER shows up on my phone and I have wasted a significant amount of time at the ticket counter and on the phone, only to be told they can't make it work. This app has inspired me to leave my phone in the car.
+★☆☆☆☆ | 2026-03-17 | Ski master | The app stinks. Never dependable on vertical ft.
+★☆☆☆☆ | 2026-03-17 | SCAM | this is the worst experience i've ever had with a company ever. the passes being non refundable even though i bought it a year in advance is the worst policy iver ever seen and i mad a mistake with the pass i bought and realized within a week that i had bought the wrong one and they refuse to refund me. Sincerely, genuinely, and wholeheartedly I hope you enjoy the 500 dollars that you scammed off of a 16yr old just trying to have fun on spring break.
+★★☆☆☆ | 2026-03-15 | App completely broke on me | Had to completely un install and reinstall because it was completely busted no matter what I tried (closing it, restarting phone, apparently no way to clear cache?)
+★★☆☆☆ | 2026-03-14 | Goofy | Ambitious app but low quality, low stars. Previous ability to track runs, now is unreliable between users. Used to love the photos, now give
+★☆☆☆☆ | 2026-03-14 | The app sucks. | I am on the East Coast with a problem. Customer service doesn't open at 10 AM eastern time. Is that ridiculous? I'm sitting in my condo cause I can't get my pass to work because it won't let me sign in into an account so I have to reset my password and it says I don't exist so then I try to create a new account and it says I do exist. I'm in a circle.
+★☆☆☆☆ | 2026-03-14 | UX is horrendous | The UX is effectively designed by a four year old who was given access to ChatGPT 4.5 and has absolutely no clue what he's doing. The photo verification thinks that black hair is a hat (thanks, racist developers), and might I mention the app continuously crashes. I could code a better app while blackout drunk.
+★☆☆☆☆ | 2026-03-13 | Lousy not Epic | Just as screwed up this year as always.  Call me and I'll build you a decent web site and app
+★☆☆☆☆ | 2026-03-13 | Buggier than they realize | Tracking etc rarely works. Can't ever get accurate stats or meet people
+★★☆☆☆ | 2026-03-12 | Works, some of the time | It was a rare lift line in which the app successfully registered everyone in my group of four.  The fix was to make that person drop their gear, dig around for their phone, log in, and show the pass.  The process easily doubled our average lift line times.  The old cards were far more reliable.  The tracking feature is also ridiculously inaccurate off ~5000 meters among my small group.  Do better Vail.
+★☆☆☆☆ | 2026-03-12 | Ticket window | 3 people working 8 stations with a very long line.
+★★★☆☆ | 2026-03-11 | GPS Tracking | The app is easy to use. The GPS tracking is limited. It does not report your max or average speed. The distance appears to include the lift ride. It also doesn't track the total time on the hills.
+★☆☆☆☆ | 2026-03-11 | Weak App | Don't use the app in place of the card or the whole thing crashes. You can change your password but only if you call Vail. On line is a disaster. Good idea, poor execution. Don't trust security if they can't do the basics. Don't attach a credit card
+★☆☆☆☆ | 2026-03-09 | GPS | The gps stats tracking has been horrendous for the 25/26 season
+★★☆☆☆ | 2026-03-08 | Needs IT help | Can't track friends very well. Add and accept friends and most are gone within 24 hours. The ones that aren't deleted have the wrong locations (as in the app says they're still on the mountain when they're sitting right next to you at dinner)
+★☆☆☆☆ | 2026-03-07 | App errors out | Constantly get pop up errors when trying to use app. Vision is there for an all in one app but execution is subpar.
+★☆☆☆☆ | 2026-03-07 | Completely broken | The latest update completely breaks the app. No data available for Stevens Pass. The button doesn't do anything. I've tried by disabling WiFi in case my pihole was blocking something the app now depends on. But even on cellular I have this issue. The product support button in the App Store does not take me to a page where I can submit a support ticket; so I have to leave a one-star review for an app that I am generally quite happy with.
+★☆☆☆☆ | 2026-03-06 | Complete Garbage | This is the biggest piece of garbage app.  It almost never works.  It doesn't link your kids over to you and doesn't let you log in as your child.  It says to call support which when you do it says they aren't open.  I hate this app so much.
+★★★☆☆ | 2026-03-06 | Could use some work (Heavenly) | Wait times are incorrect on the app especially for the horrible Gondola line at Heavenly Village. Over an hour and half wait.  To make matters worse the ingress and egress to the mountain on the shuttle and in an uber is horrible as well.
+★☆☆☆☆ | 2026-03-03 | Vail is a scam | If you don't cancel your pass in April, you'll get a close to $1000 charge in September that is not refundable because you automatically renewed. Vail sucks.
+★★☆☆☆ | 2026-03-03 | Season pass renewal | As a retired veteran my Season pass Ive had auto renewed for years apparently didn't renew my wife's this year.  So at Whistler and $900 later we discovered this.   Thanks
+★★★☆☆ | 2026-03-03 | Awkwardly incomplete | The Find My friend option is great. What blows my mind as I can't get a weather report/forecast. I can get a description of how the conditions were in the past but nothing about the future. That's even remotely accurate. It would be awesome to be able to look at all the epic mountains and know which one had the best snow for the next couple days.  For some reason that's not on here.
+★☆☆☆☆ | 2026-03-03 | What a joke | Terrible app
+★★★☆☆ | 2026-03-02 | Okay for nav, not great at tracking | Always had high hopes for this app to be better than Ikon but no such luck. Oh well - something to work on. Tracking not so good; often times doesn't log my distance or location.
+★★★★★ | 2026-03-01 | Thaaboybrian | The BEST DAM APPPP FOR MY SNOWBOARDING NEEEEESS
+★☆☆☆☆ | 2026-02-28 | Basically useless | In the past this app worked ok. This year it has been absolute trash!  The GPS tracking never worked and it constantly logged my husband and I out randomly. Then it would be a struggle to get back on so our Epic Pass could scan at the lift line. This caused delays in line. If you are going to force us to have an electronic pass on our phone, you need to ensure it actually works!!!
+★★☆☆☆ | 2026-02-27 | Not nearly as bad | So a few years ago they took a great app and made it absolutely abysmal. It's definitely gotten less bad. It's not super accurate. It gave me credit for riding a lift I was nowhere near and didn't give me credit for a good half a day's effort. Having it on all day to use as a pass really drains the battery on my phone. So, the 2 star is better than my previous 1 star reviews. I guess that's something.
+★☆☆☆☆ | 2026-02-27 | Doesn't work | I gave it one star because it's not possible to give it zero stars.  While the app tracks me knowing which resort I'm at, it doesn't track my progress on the slopes.  Useless to me on my iPhone.  I have it set for GPS tracking.
+★★★☆☆ | 2026-02-27 | Works but annoying | Does the app developer or Vail marketing even know what skiing is??  Why does the app wipe out my login credentials every two weeks or so?? This is so asinine, my banks don't even do this.  This app is horrible with fingerprint login. And if you can't remember your password, the app locks you out after a few tries. When the app works it's fun. When it doesn't, I want to throw my phone through Vail's marketing dept window! And that is often.
+★★★★★ | 2026-02-26 | Fab | Easy pessie
+★★★★★ | 2026-02-26 | Skier | Amazing. So convenient.
+★★★★★ | 2026-02-26 | And it works!! | The integrated payments, lifts, discounts, snow reports is exactly what is needed. But the fact that it just works makes this tech work. Kudos to the developers.
+★★★★☆ | 2026-02-25 | The Pass Works Well | But, the vendor needs to make sure there is a strong WiFi available.
+★☆☆☆☆ | 2026-02-25 | Did not collect stats | My pass scanned at the gondola but the app did not collect stats.
+★★☆☆☆ | 2026-02-24 | Bluetooth pass didn't scan | My bluetooth pass on my phone didn't work when scanned
+★☆☆☆☆ | 2026-02-23 | Does not work well while skiing | While nice in theory does not work well while skiing. Would greatly prefer a paper map a terrain/lift status board at the base area. Tips to developers: 1) don't design features that require live data access while on the mountain 2) don't require log on to access features - Face ID does not work with goggles and face coverings 3) cell phone batteries die quicker in cold weather, I do not want to use my phone as a lift ticket 4) why would I want to use an AI chat bot while skiing - just make a light app that works and give skiers trail maps and rfid card. With day passes costing $250+ this should not be difficult
+★★☆☆☆ | 2026-02-23 | Needs help | Can't get the find friends to find friends
+★☆☆☆☆ | 2026-02-23 | Have to have phone | No good. Have to have phone to board lifts. Tickets prices are high enough and you must buy a hard card.
+★☆☆☆☆ | 2026-02-21 | Logs out constantly | Face ID login does not work. It logs out constantly, also it is reporting problems every time that I open a map. Open trails not that easy to find.
+★☆☆☆☆ | 2026-02-20 | Poor tracking, worsening support | GPS tracking is not working great. This year, I'm missing lift everyday in the tracking. The gps function doesn't work. Maps can't be downloaded. Stupid as one may need the app when there is actually little or no coverage. Support is difficult to get in touch with. Stats are biased and not reliable. Plenty of lift missing for no reason.
+★★★☆☆ | 2026-02-18 | Awesome sometimes | The layout is fine the options are fine but only works sometimes.  The find my friends had to delete and reconnect 6+ times over 3 days, recorded elevation but not miles.  Would be 5 stars if it worked.
+★☆☆☆☆ | 2026-02-18 | Stopped working | Stopped working after update
+★☆☆☆☆ | 2026-02-18 | Frustrating | Annoying Sign on complexities. Poor UI.  This is embarrassing. Ur poor helpdesk.
+★☆☆☆☆ | 2026-02-18 | Daily Status Updates Don't Work | Want to see if lifts are open? How about the daily snow report? The app will give you a few teaser words, but then everything else is hidden. Clicking the status update does nothing. The websites are now the same generic corporate platform with no meaningful status information. It's been years and this shockingly poor design remains.`,
+  ikon: `★☆☆☆☆ | 2026-03-25 | Don’t expect much | Where do I start…. What a frustrating app!  I had it open from a day earlier, and said it was still tracking, but it wasn’t. Lost an entire day of stats. Need to blow away the app. Each night. And be prepared to login again each time, particularly frustrating when you’re all geared up and it won’t recognize your face.  And don’t get me started when it won’t start tracking because you’re ‘ not at a resort”, but when you get there (and it knows you are) it doesn’t automatically start tracking !!   Much better blood pressure using Strava.
+★☆☆☆☆ | 2026-03-25 | Carl Schultz | great if you want to go shopping, actively hostile if you want to use it for looking at a trail map, god forbid
+★☆☆☆☆ | 2026-03-25 | Don't expect much | Where do I start. What a frustrating app! I had it open from a day earlier, and said it was still tracking, but it wasn't. Lost an entire day of stats. Need to blow away the app each night. And be prepared to login again each time, particularly frustrating when you're all geared up and it won't recognize your face. And don't get me started when it won't start tracking because you're not at a resort, but when you get there (and it knows you are) it doesn't automatically start tracking!! Much better blood pressure using Strava.
+★★★☆☆ | 2026-03-21 | Meh | It's a shame. I get why they combined all the resort apps into one. But there was so much more local flavor to the apps when they were independent. Now I just stick to Slopes for tracking my skiing and let it connect back to IKON to record my stats for the local stuff and home bragging rights.
+★☆☆☆☆ | 2026-03-19 | Have to update the app almost every day | Title says it all. Fix it, Ikon
+★☆☆☆☆ | 2026-03-19 | Whats going on with this app? | And why do i have to keep updating my app everyday?
+★★☆☆☆ | 2026-03-18 | Unreliable | Tracking works only when the app feels like it. About 1 day out of 4 it decides I'm not authorized to track. And before you ask, my iPhone is always up to date. The app is simply not good enough for prime time.
+★☆☆☆☆ | 2026-03-18 | Horrible resets tracking | Horrible app
+★★★★☆ | 2026-03-17 | Large fonts please! | Like the 3d view. Can't read lift names though. Small font. And when you zoom in the font goes smaller again! Please make lift names readily available. Thx
+★★☆☆☆ | 2026-03-15 | What are they doing? | This app got significantly worse for the 2025-2026 season. The tracking barely ever works and it is way more complicated to track with a group - to the point where I never track on Ikon anymore. The layout is more difficult to navigate and I always get thrown error messages. Additionally, I can never select resorts in my wallet so I can't use my mountain credits. I don't know what type of product owner they assigned this app revamp but my goodness this rollout was bad. Many peers of mine agree - the app has gotten significantly worse.
+★☆☆☆☆ | 2026-03-12 | What did you guys do? | I was convinced I had no internet access until I read the reviews. Nothing works. No maps at mammoth and no tracking?
+★☆☆☆☆ | 2026-03-08 | Marketing Notifications | No way to turn off marketing notifications
+★☆☆☆☆ | 2026-03-07 | Broken update | Would be cool if I could still see my favorites and credits
+★☆☆☆☆ | 2026-03-06 | Not as good as the mountain specific apps | It takes 8 clicks to see what used to take 2 clicks to see
+★★☆☆☆ | 2026-03-06 | Significant Downgrade | Replaced the palisades app, which provided all the same features without tons of ads and an absolutely useless tracking system. Use slopes for tracking. Ikon is only useful for monitoring which lifts are open. The lift wait times are basically useless as well.
+★★★☆☆ | 2026-02-28 | Ski App - But Defaults to Non-Ski Map | App is ok, it doesnt seem to want to save favorite mountains. Biggest complaint is it always defaults to the map of the resort which is NOT the trail map. Can't think of a reason why this would be except Alterra wanting everyone to know where to buy expensive F&B. Would really like to see this change to default to trail map.
+★★☆☆☆ | 2026-02-28 | Tracking of invited friends does not work | loaded this primarily as replacement to outdated app. this new app offers nice maps etc, but tracking of a group (invited family members) via link doesn't work, even though they all had downloaded the app.
+★★★☆☆ | 2026-02-27 | Meh - has gotten worse | This app used to be so perfect. Maybe two years ago was the peak? This year is the worst it's been. Generally not a helpful app anymore other than friend tracking. It's no longer intuitive. It's clunky and hard to figure out. I would like to easily access the snow report, maps, and other relevant info for a ski mountain but I feel like the stuff is either not there anymore or buried and super hard to find. Disappointing.
+★☆☆☆☆ | 2026-02-25 | Let's Make It Worse! | Just another example of why monopolies are illegal.
+★☆☆☆☆ | 2026-02-22 | Awful app | This is the worst most useless app ever. Impossible to find lift and mountain updates. All the useful information is buried behind multiple clicks. Live cams are not easy to find. Nothing I want from an app and this is the replacement for a super useful palisades app. HATE IT
+★☆☆☆☆ | 2026-02-21 | Update | Once updated, it killed tracking. Very disappointing. Tried tracking on Steamboat app 1st 2 days of the season. That didn't work. Found out later that had to use Ikon app. Then, yesterday I was forced to update the app. Once updated any attempt to track told me I was not a registered user.
+★★★☆☆ | 2026-02-20 | Do better | The app was never perfect and that's okay. This season with the new updates it sucks. I minored in graphic design and I can't figure out how to stop tracking let alone navigate the app. You have good data but get someone who can build your UI
+★☆☆☆☆ | 2026-02-20 | Terrible app experience - a big downgrade | You took a decent Palisades app and merged it into a low tier ikon app and made the overall experience terrible. This is a terrible app. I hope you reconsider the redesign.
+★☆☆☆☆ | 2026-02-19 | 2 steps back from Palisades App | Not up to date; doesn't track as many stats or all of your swipes/days; difficult to find critical Mtn Ops info. Big corporate fail
+★☆☆☆☆ | 2026-02-17 | Garbag | How do you take an amazing app from 24/25 and make it such utter junk the next year? No interactive map to allow toggling active runs/lifts. No way to check full list of open trails. Seriously lacking. Let the mountains bring back their own apps again because this half-assed attempt is pathetic.
+★☆☆☆☆ | 2026-02-17 | Terrible Interface | All my homies hate this app. So cumbersome. Pain in the butt to get to the resort you want. Trail maps are garbage
+★☆☆☆☆ | 2026-02-16 | Unreliable | Instead of saving my favorite destinations after I pick them on the app, I have to re-enter my favorite destinations EVERY time I open the app.
+★☆☆☆☆ | 2026-02-16 | Sucks | This app is terrible. Preferences with resorts don't get saved. It sucks to have one app with 72 things in. I liked having my home mountain app where I could see the information I needed at a glance. Instead I have to deal with this worthless app for no reason. Another terrible mistake by alterra.
+★☆☆☆☆ | 2026-02-16 | Not good | They never updated anything and it's basically useless.
+★★★☆☆ | 2026-02-16 | Unable to add favorites | Since the latest update, adding favorites doesn't stick after you close and reopen the app
+★☆☆☆☆ | 2026-02-14 | Awful | I will switch to epic pass next year if you don't fix the steamboat trail map.
+★★☆☆☆ | 2026-02-12 | The Opportunity To Be So Cool | So buggy you'd think ChatGPT vibecoded it
+★☆☆☆☆ | 2026-02-12 | Pointless | This app is supposed to track multiple things (favorite hills, on the hill movement, visits, etc.) and all of this info should be available and handy in order for the app to be a useful resource but it does none of the above. The only time I get updated info is when I delete the app, redownload, and log in again. Couldn't be more inconvenient.
+★★☆☆☆ | 2026-02-12 | Favorites not working | Reporting bug in app, that the favorites don't save. I thought that it was because I added one destination that it removed all the others and you had to select all at once (which I thought was a poor user experience), but I was wrong, the favorites just don't save. Also the chat bot for the app is extremely weak.
+★☆☆☆☆ | 2026-02-11 | Unreliable | This app is complete trash. All it is more advertising for the company that is Ikon. The tracking function has failed on me multiple times. The weather functions are not updated frequently and the information they provide is never accurate, the webcams never show anything. This app is just plain useless.
+★★☆☆☆ | 2026-02-11 | Favorites | You open the app, select favorites. When you return to the app, favorites are gone. And no, I didn't sign out.
+★☆☆☆☆ | 2026-02-09 | useless | this app sucks. no where to start recording your ski day to see your stats.
+★☆☆☆☆ | 2026-02-08 | What's the point? | What's the point - watch app fails more times than it should to upload data.
+★★★☆☆ | 2026-02-04 | Good, but not as good as the previous Palisades app | On the plus side, this app has all the key information skiers need, including which lifts are open and scheduled, trails open and closed, parking info, and even lift wait times, although that last info is oddly hard to find as it's only showed on the map in Trails mode, which is not the default. The map in the default Village mode is useless to me. Only key info that's missing is the 2-week weather outlook, which was very useful to plan my next ski trip. A very annoying feature is that it prompts for user ID and password every week, and there's no automatic completion. In short, it's a good app but a significant step down from the older Palisades app we had until last year.
+★☆☆☆☆ | 2026-02-02 | Update for 25-26 Season is Hot Garbage | Please revert the app to last seasons version. If it's not broke don't fix it. This version constantly has issues with tracking, takes multiple restarts to even detect the resort you are currently at. It is also impossible to navigate and find what you need. Maps for resorts when exploring immediately turn into a white page of nothing if you even touch or scroll. At this point I think everyone is better off downloading resort specific apps and passing on this one.
+★★★☆☆ | 2026-02-01 | Kinda Sucks | I've come to the conclusion that the Ikon Pass app kind of sucks. I was forced to move to this app versus the individual resort apps which makes sense. But I think the developers under delivered on this one. Just take a few minutes and check out the OnTheSnow app and you'll see the difference. The at-a-glance view on Ikon doesn't really give you the stuff you want to see at a glance such as what is the base depth, and a quick summary of the current conditions plus a quick forecast of any snow to come. OnTheSnow does a better job at this. I think the potential is there, but currently this app is under delivering, especially for Ikon Pass holders with the annual investment we make that should easily fund a best in class app.
+★☆☆☆☆ | 2026-01-31 | No way to change unit to celsius | No way to change unit to celsius
+★☆☆☆☆ | 2026-01-31 | Bad Substitute for Mountain-Specific Apps | Replacing the Palisades app with this is a step down in functionality and convenience. It might not be so bad if I could set it to open straight to the Palisades page, but having to navigate there every time - when I don't use the app for anything else - is really annoying.
+★★☆☆☆ | 2026-01-31 | Bring Back Resort Specific Apps Please | The pass barcode in the app is the only useful feature. Lift and trail statuses are buried and often incorrect. Twitter (X) is a better source for real-time and accurate mountain ops.
+★★★☆☆ | 2026-01-30 | Steamboat map | New steamboat map is good if you want to track but i cant use it to find out which trails are open. Old map is better.
+★☆☆☆☆ | 2026-01-28 | Unable to get tracking to work | The pass itself is fine; first year I have used it. However, the app does not appear to do anything useful. I can get the better information on conditions directly from the resorts websites, and cannot get tracking and stats to work at all on my iPhone. Apparently the app is not requesting to use location services and I have not been able to activate location sharing for the app.
+★☆☆☆☆ | 2026-01-27 | Not great | App constantly forgets my favorites so I have to re-add my home ski resort every time I use it. App doesn't add scanned days. It did the first two days I skied but doesn't anymore.
+★☆☆☆☆ | 2026-01-25 | Worthless app | The old Squaw Valley app had all the info you needed (mtn ops updates, temps and snowfall at different locations and elevations), readily and easily accessible. The ikon app presents you with advertisements as the first thing you see, can't remember your designated favorite mountains, and then doesn't even make the most pertinent information available in the app.
+★★★☆☆ | 2026-01-24 | Please make the regular steamboat map available again | The 3D map looks cool but is less useful than the regular trail map when looking at a glance. Just allow a toggle to show the old map again
+★☆☆☆☆ | 2026-01-23 | Battery Drain | Latest app update with 3D maps is an absolute drain on phone battery. Can barely track a full day without completely killing off your phone. 4 of us tracked all day and none of our phones made it.
+★☆☆☆☆ | 2026-01-23 | 3D Maps Suck | Your 3D maps update is GARBAGE. Hard to navigate around steamboat, the open trails are not indicated with highlight anymore (which made it easy to see what zones were open). Not all trails show, the zoom and panning is broken, and the map doesn't even reflect the actual contours of the mountain. A big step back (along with the whole app this year).
+★☆☆☆☆ | 2026-01-23 | Unhelpful | Is this even made by people`,
+  other: ''
+};
+let currentApp = 'vail';
+let analysisCache = {};
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('review-input').value = appData[currentApp] || '';
+});
+
+function selectApp(app, el) {
+  appData[currentApp] = document.getElementById('review-input').value;
+  currentApp = app;
+  document.querySelectorAll('.app-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('review-input').value = appData[app] || '';
+  document.getElementById('results').classList.remove('visible');
+  document.getElementById('status-msg').textContent = '';
+  if (analysisCache[app]) renderResults(analysisCache[app], app);
+}
+
+function clearAll() {
+  appData[currentApp] = '';
+  document.getElementById('review-input').value = '';
+  document.getElementById('results').classList.remove('visible');
+  document.getElementById('status-msg').textContent = '';
+  delete analysisCache[currentApp];
+  ['vail','ikon','other'].forEach(a => {
+    const el = document.getElementById('count-'+a);
+    if(el) el.textContent = '';
+  });
+}
+
+function analyzeReviews() {
+  const input = document.getElementById('review-input').value.trim();
+  if (!input) { setStatus('paste some reviews first', 'error'); return; }
+
+  setStatus('analyzing...', 'loading');
+
+  // Parse reviews from format: ★★☆☆☆ | date | title | content
+  const reviews = [];
+  for (const line of input.split('\n')) {
+    const t = line.trim();
+    if (!t) continue;
+    const m = t.match(/^(★+)(☆*)/);
+    if (!m) continue;
+    const rating = m[1].length;
+    const rest = t.replace(/^[★☆]+\s*\|\s*/, '');
+    const parts = rest.split(' | ');
+    reviews.push({
+      rating,
+      date: parts[0]?.trim() || '',
+      title: parts[1]?.trim() || '',
+      content: parts.slice(2).join(' | ').trim(),
+      full: ((parts[1] || '') + ' ' + parts.slice(2).join(' ')).toLowerCase()
+    });
+  }
+
+  if (!reviews.length) { setStatus('could not parse reviews — check format', 'error'); return; }
+
+  const total = reviews.length;
+  const avgRating = reviews.reduce((s, r) => s + r.rating, 0) / total;
+
+  const THEME_DEFS = [
+    {
+      name: 'GPS & Stat Tracking', type: 'critical',
+      keywords: ['gps', 'tracking', 'track', 'stat', 'vertical', 'distance', 'elevation', 'speed', 'location', 'miles', 'lifts missed', 'lift count', 'recording'],
+      opp: { title: 'Fix GPS tracking reliability', description: 'The top complaint across both apps. Tracking silently fails mid-session, misses lifts, and produces inaccurate stats. Needs background location reliability fixes and a visible "tracking active" indicator.', type: 'bug_fix' }
+    },
+    {
+      name: 'Login & Session Drops', type: 'critical',
+      keywords: ['log out', 'login', 'sign in', 'password', 'face id', 'credential', 'logs out', 'logged out', 'account', 'session', 'relogin', 'sign on', 'locked out'],
+      opp: { title: 'Persistent login sessions', description: 'App forces re-login far too often — especially painful on the mountain with gloves and goggles. Sessions should persist weeks, not days. Face ID must work reliably.', type: 'ux_improvement' }
+    },
+    {
+      name: 'Crashes & Broken Updates', type: 'critical',
+      keywords: ['crash', 'broken', 'broke', 'bug', 'error', 'freeze', 'not working', 'stopped working', 'update broke', 'nothing works', 'reinstall', 'busted', 'garbage', 'trash'],
+      opp: { title: 'Staged rollout + regression tests', description: 'Multiple reviews cite updates breaking core features immediately on release. Implement staged rollouts, automated regression tests for pass scan and tracking, and a rollback plan.', type: 'bug_fix' }
+    },
+    {
+      name: 'Pass & Lift Scanning', type: 'critical',
+      keywords: ['scan', 'bluetooth', 'lift ticket', 'lift line', 'pass scan', 'barcode', 'ticket counter', 'lift access', 'hard card'],
+      opp: { title: 'Offline-capable pass display', description: 'Pass must display without connectivity. Cache the barcode/QR locally so it works even with no cell signal on the mountain.', type: 'feature' }
+    },
+    {
+      name: 'Favorites Not Saving', type: 'critical',
+      keywords: ['favorite', 'favourit', 'home mountain', 'save resort', 'preferences', "doesn't save", "don't save", 'reset favorites', 're-add', 'reselect'],
+      opp: { title: 'Fix favorites persistence bug', description: 'Users report favorites resetting every time the app is closed. This is a clear data persistence bug — user preferences must survive app restarts.', type: 'bug_fix' }
+    },
+    {
+      name: 'Maps & Trail Info', type: 'friction',
+      keywords: ['map', 'trail', 'trails', 'offline map', '3d map', 'trail map', 'open trail', 'lift status', 'open lift', 'resort map'],
+      opp: { title: 'Default to trail map view', description: 'Users want trail/lift status at a glance. Make trail map the default, with open/closed status clearly overlaid. Village/resort map should be a secondary tab.', type: 'ux_improvement' }
+    },
+    {
+      name: 'UI/UX & Navigation', type: 'friction',
+      keywords: ['ui', 'ux', 'interface', 'navigation', 'navigate', 'clunky', 'confusing', 'design', 'clicks', 'buried', 'hard to find', 'intuitive', 'layout', 'usability', 'complicated'],
+      opp: { title: 'Simplify core navigation', description: 'Key info is buried 6–8 clicks deep. Redesign the home screen to surface pass status, open lifts/trails, and tracking toggle above the fold.', type: 'ux_improvement' }
+    },
+    {
+      name: 'Friend & Group Tracking', type: 'friction',
+      keywords: ['friend', 'group', 'find my', 'social', 'location sharing', 'invite', 'family', 'party tracking'],
+      opp: null
+    },
+    {
+      name: 'Battery Drain', type: 'friction',
+      keywords: ['battery', 'drain', 'power', 'phone died', 'battery life', 'kills battery'],
+      opp: null
+    },
+    {
+      name: 'Pricing & Refund Frustration', type: 'friction',
+      keywords: ['refund', 'expensive', 'scam', 'charge', 'renewal', 'auto renew', 'money', 'dollar', 'price', 'cost', 'paid', 'non refundable'],
+      opp: null
+    },
+    {
+      name: 'Positive Experience', type: 'positive',
+      keywords: ['great', 'love', 'amazing', 'excellent', 'perfect', 'awesome', 'easy', 'works well', 'convenient', 'best', 'smooth', 'fantastic'],
+      ratingMin: 4,
+      opp: null
+    },
+    {
+      name: 'Competitor App Mentions', type: 'neutral',
+      keywords: ['slopes', 'strava', 'onthesnow', 'on the snow', 'palisades app', 'resort app', 'specific app', 'mountain app', 'individual app', 'old app', 'previous app', 'surfline'],
+      opp: null
+    },
+  ];
+
+  const themeResults = [];
+  const competitorReviews = [];
+
+  for (const def of THEME_DEFS) {
+    const matched = reviews.filter(r => {
+      if (def.type === 'positive') return r.rating >= (def.ratingMin || 4);
+      return def.keywords.some(kw => r.full.includes(kw));
+    });
+    if (!matched.length) continue;
+
+    const quotes = matched
+      .filter(r => r.content.length > 10)
+      .slice(0, 5)
+      .map(r => `[${r.rating}★ · ${r.date}] "${r.title}" — ${r.content}`);
+
+    const lowRated = matched.filter(r => r.rating <= 2).length;
+    const pct = Math.round((matched.length / total) * 100);
+
+    let summary;
+    if (def.type === 'positive') {
+      summary = `${matched.length} reviews (${pct}%) were positive. Commonly praised: easy pass access, convenient features, and smooth integrations.`;
+    } else if (def.type === 'neutral') {
+      summary = `${matched.length} reviews mentioned other apps by name, mostly unfavorably comparing the current app to older resort-specific or third-party tools.`;
+    } else {
+      summary = `Mentioned in ${matched.length} reviews (${pct}%). ${lowRated} of those are 1–2 star ratings.`;
+    }
+
+    if (def.name === 'Competitor App Mentions') matched.forEach(r => competitorReviews.push(r));
+
+    themeResults.push({ name: def.name, type: def.type, summary, count: matched.length, representative_quotes: quotes, _opp: def.opp });
+  }
+
+  themeResults.sort((a, b) => {
+    const order = { critical: 0, friction: 1, feature_request: 2, positive: 3, neutral: 4 };
+    if (order[a.type] !== order[b.type]) return order[a.type] - order[b.type];
+    return b.count - a.count;
+  });
+
+  const opportunities = themeResults
+    .filter(t => t._opp)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5)
+    .map(t => ({ ...t._opp, reviews: t.representative_quotes, count: t.count }));
+
+  let competitive_insight = null;
+  if (competitorReviews.length) {
+    const apps = [];
+    const low = input.toLowerCase();
+    if (low.includes('slopes')) apps.push('Slopes');
+    if (low.includes('strava')) apps.push('Strava');
+    if (low.includes('onthesnow') || low.includes('on the snow')) apps.push('OnTheSnow');
+    if (low.includes('palisades app')) apps.push('old Palisades app');
+    if (low.includes('surfline')) apps.push('Surfline');
+    competitive_insight = `${competitorReviews.length} reviews mentioned competing apps${apps.length ? ' — including ' + apps.join(', ') : ''}. Most comparisons were unfavorable to the current app, with users preferring older resort-specific apps or third-party tracking tools like Slopes and Strava.`;
+  }
+
+  const top_quotes = reviews
+    .filter(r => r.rating <= 2 && r.content.length > 60)
+    .sort((a, b) => b.content.length - a.content.length)
+    .slice(0, 3)
+    .map(r => ({
+      text: r.content,
+      context: `${r.rating}-star · ${r.date} · "${r.title}"`
+    }));
+
+  const critical_count = themeResults.filter(t => t.type === 'critical').reduce((s, t) => s + t.count, 0);
+  const friction_count = themeResults.filter(t => t.type === 'friction').reduce((s, t) => s + t.count, 0);
+
+  const result = {
+    total_reviews: total,
+    themes: themeResults.map(({ _opp, ...rest }) => rest),
+    opportunities,
+    competitive_insight,
+    top_quotes,
+    critical_count,
+    friction_count
+  };
+
+  analysisCache[currentApp] = result;
+  const countEl = document.getElementById('count-' + currentApp);
+  if (countEl) countEl.textContent = `(${total})`;
+  document.getElementById('run-date').textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  renderResults(result, currentApp);
+  setStatus(`${total} reviews analyzed · avg ★ ${avgRating.toFixed(2)}`, '');
+}
+
+function renderResults(data, app) {
+  document.getElementById('res-total').textContent = data.total_reviews ?? '—';
+  document.getElementById('res-critical').textContent = data.critical_count ?? '—';
+  document.getElementById('res-friction').textContent = data.friction_count ?? '—';
+  document.getElementById('res-opportunities').textContent = data.opportunities?.length ?? '—';
+
+  // Themes
+  const grid = document.getElementById('themes-grid');
+  grid.innerHTML = '';
+  (data.themes || []).forEach(theme => {
+    const badgeClass = {
+      critical: 'badge-critical',
+      friction: 'badge-friction',
+      positive: 'badge-positive',
+      feature_request: 'badge-feature',
+      neutral: 'badge-neutral'
+    }[theme.type] || 'badge-neutral';
+
+    const badgeLabel = {
+      critical: 'critical',
+      friction: 'friction',
+      positive: 'positive',
+      feature_request: 'feature req',
+      neutral: 'neutral'
+    }[theme.type] || theme.type;
+
+    const quotes = (theme.representative_quotes || []).map(q =>
+      `<div class="review-item" style="white-space:pre-wrap;word-break:break-word;">${q}</div>`
+    ).join('');
+
+    const card = document.createElement('div');
+    card.className = 'theme-card';
+    card.innerHTML = `
+      <div class="theme-header">
+        <div class="theme-name">${theme.name}</div>
+        <span class="theme-badge ${badgeClass}">${badgeLabel}</span>
+      </div>
+      <div class="theme-summary">${theme.summary}</div>
+      <div class="theme-meta">
+        <span class="theme-count">${theme.count} mention${theme.count !== 1 ? 's' : ''}</span>
+      </div>
+      ${quotes ? `<div class="theme-reviews">${quotes}</div>` : ''}
+    `;
+    if (quotes) {
+      card.onclick = () => {
+        const rev = card.querySelector('.theme-reviews');
+        rev.classList.toggle('visible');
+        card.classList.toggle('expanded');
+      };
+    }
+    grid.appendChild(card);
+  });
+
+  // Opportunities
+  const opp = document.getElementById('opportunities');
+  opp.innerHTML = '';
+  (data.opportunities || []).forEach((o, i) => {
+    const tagLabel = {
+      bug_fix: 'bug fix',
+      feature: 'new feature',
+      ux_improvement: 'ux improvement',
+      performance: 'performance'
+    }[o.type] || o.type;
+
+    const reviewsHtml = (o.reviews || []).map(q =>
+      `<div class="review-item" style="white-space:pre-wrap;word-break:break-word;">${q}</div>`
+    ).join('');
+
+    const item = document.createElement('div');
+    item.className = 'opportunity-item';
+    item.style.flexDirection = 'column';
+    item.style.cursor = reviewsHtml ? 'pointer' : 'default';
+    item.innerHTML = `
+      <div style="display:flex;gap:16px;">
+        <div class="opp-num">0${i+1}</div>
+        <div class="opp-content">
+          <div class="opp-title">${o.title}</div>
+          <div class="opp-desc">${o.description}</div>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:8px;">
+            <span class="opp-tag">${tagLabel}</span>
+            ${reviewsHtml ? `<span style="font-family:var(--font-mono);font-size:10px;color:var(--text3)">${o.count} mention${o.count !== 1 ? 's' : ''} · click to expand</span>` : ''}
+          </div>
+        </div>
+      </div>
+      ${reviewsHtml ? `<div class="opp-reviews" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">${reviewsHtml}</div>` : ''}
+    `;
+    if (reviewsHtml) {
+      item.addEventListener('click', () => {
+        const rev = item.querySelector('.opp-reviews');
+        const isOpen = rev.style.display !== 'none';
+        rev.style.display = isOpen ? 'none' : 'block';
+        item.style.borderColor = isOpen ? '' : 'var(--accent)';
+      });
+    }
+    opp.appendChild(item);
+  });
+
+  // Competitor insight
+  const compSection = document.getElementById('competitor-section');
+  const compNote = document.getElementById('competitor-note');
+  if (data.competitive_insight) {
+    compSection.style.display = 'block';
+    compNote.innerHTML = `
+      <div class="cn-label">competitive signal</div>
+      <div class="cn-text">${data.competitive_insight}</div>
+    `;
+  } else {
+    compSection.style.display = 'none';
+  }
+
+  // Quotes
+  const quotes = document.getElementById('top-quotes');
+  quotes.innerHTML = '';
+  (data.top_quotes || []).forEach(q => {
+    const item = document.createElement('div');
+    item.className = 'quote-item';
+    item.style.whiteSpace = 'pre-wrap';
+    item.style.wordBreak = 'break-word';
+    item.innerHTML = `"${q.text}"<div class="quote-source">${q.context || ''}</div>`;
+    quotes.appendChild(item);
+  });
+
+  document.getElementById('results').classList.add('visible');
+}
+
+function setStatus(msg, type) {
+  const el = document.getElementById('status-msg');
+  el.innerHTML = msg;
+  el.className = 'status-msg' + (type ? ' ' + type : '');
+}
+</script>
+</body>
+</html>
