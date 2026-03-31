@@ -177,9 +177,20 @@ def main():
     vail_n = totals.get("vail", 0)
     ikon_n = totals.get("ikon", 0)
 
+    # Commit and push to GitHub so the Pages URL is always current
+    repo_dir = HTML_PATH.parent
+    today = datetime.now().strftime("%Y-%m-%d")
+    subprocess.run(["git", "-C", str(repo_dir), "add", "app_review_miner.html"], check=False)
+    subprocess.run(
+        ["git", "-C", str(repo_dir), "commit", "-m", f"Weekly review update {today} — {total_new} new reviews"],
+        check=False,
+    )
+    subprocess.run(["git", "-C", str(repo_dir), "push"], check=False)
+    print("  Pushed to GitHub.")
+
     notify(
         "App Review Intel",
-        f"{total_new} new reviews this week (Vail: {vail_n} · Ikon: {ikon_n}) — open dashboard to analyze",
+        f"{total_new} new reviews this week (Vail: {vail_n} · Ikon: {ikon_n}) — dashboard updated",
     )
 
     dashboard = HTML_PATH.resolve()
