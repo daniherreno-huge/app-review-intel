@@ -872,14 +872,49 @@ function analyzeReviews() {
 
   let competitive_insight = null;
   if (competitorReviews.length) {
-    const apps = [];
-    const low = input.toLowerCase();
-    if (low.includes('slopes')) apps.push('Slopes');
-    if (low.includes('strava')) apps.push('Strava');
-    if (low.includes('onthesnow') || low.includes('on the snow')) apps.push('OnTheSnow');
-    if (low.includes('palisades app')) apps.push('old Palisades app');
-    if (low.includes('surfline')) apps.push('Surfline');
-    competitive_insight = `${competitorReviews.length} reviews mentioned competing apps${apps.length ? ' — including ' + apps.join(', ') : ''}. Most comparisons were unfavorable to the current app, with users preferring older resort-specific apps or third-party tracking tools like Slopes and Strava.`;
+    // Count mentions per competitor and track sentiment
+    const competitorDefs = [
+      { name: 'Slopes', keywords: ['slopes'] },
+      { name: 'Strava', keywords: ['strava'] },
+      { name: 'OnTheSnow', keywords: ['onthesnow', 'on the snow'] },
+      { name: 'old Palisades app', keywords: ['palisades app'] },
+      { name: 'resort-specific apps', keywords: ['resort app', 'specific app', 'mountain app', 'individual app', 'old app', 'previous app', 'their own app', 'home mountain app'] },
+      { name: 'Surfline', keywords: ['surfline'] },
+    ];
+
+    const mentioned = [];
+    const preferredOver = []; // competitors users say are better
+    const preferredBy = []; // competitors users prefer this app over
+
+    for (const def of competitorDefs) {
+      const matchingReviews = competitorReviews.filter(r =>
+        def.keywords.some(kw => r.full.includes(kw))
+      );
+      if (!matchingReviews.length) continue;
+
+      // Naive sentiment: if review is 1-2 stars + mentions competitor = user prefers competitor
+      const negative = matchingReviews.filter(r => r.rating <= 2).length;
+      const positive = matchingReviews.filter(r => r.rating >= 4).length;
+      mentioned.push({ name: def.name, count: matchingReviews.length, negative, positive });
+      if (negative > positive) preferredOver.push(def.name);
+    }
+
+    mentioned.sort((a, b) => b.count - a.count);
+
+    const mentionSummary = mentioned
+      .map(m => `${m.name} (${m.count} mention${m.count !== 1 ? 's' : ''})`)
+      .join(', ');
+
+    let sentenceParts = [];
+    if (preferredOver.length) {
+      sentenceParts.push(`Users in low-rated reviews favor ${preferredOver.join(' and ')} over this app`);
+    }
+    const neutralOrPositive = mentioned.filter(m => !preferredOver.includes(m.name));
+    if (neutralOrPositive.length) {
+      sentenceParts.push(`${neutralOrPositive.map(m => m.name).join(' and ')} mentioned in mixed or positive context`);
+    }
+
+    competitive_insight = `${competitorReviews.length} review${competitorReviews.length !== 1 ? 's' : ''} reference competing or alternative apps — ${mentionSummary}. ${sentenceParts.join('. ')}.`;
   }
 
   const top_quotes = reviews
