@@ -13,7 +13,7 @@ from pathlib import Path
 
 import requests
 
-HTML_PATH = Path(__file__).parent / "app_review_miner.html"
+HTML_PATH = Path(__file__).parent / "index.html"
 CUTOFF_DAYS = 7  # how far back to fetch reviews
 
 APPS = {
@@ -180,7 +180,7 @@ def main():
     # Commit and push to GitHub so the Pages URL is always current
     repo_dir = HTML_PATH.parent
     today = datetime.now().strftime("%Y-%m-%d")
-    subprocess.run(["git", "-C", str(repo_dir), "add", "app_review_miner.html"], check=False)
+    subprocess.run(["git", "-C", str(repo_dir), "add", "index.html"], check=False)
     subprocess.run(
         ["git", "-C", str(repo_dir), "commit", "-m", f"Weekly review update {today} — {total_new} new reviews"],
         check=False,
