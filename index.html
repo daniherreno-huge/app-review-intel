@@ -433,6 +433,36 @@ body {
   user-select: text;
 }
 .quote-row:last-child { margin-bottom: 0; }
+.review-item {
+  padding: 10px 14px;
+  background: var(--bg3);
+  border-radius: 5px;
+  margin-bottom: 6px;
+  border-left: 2px solid var(--border2);
+  user-select: text;
+}
+.review-item-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text3);
+  margin-bottom: 5px;
+  letter-spacing: 0.02em;
+}
+.review-item-title {
+  font-size: 12px;
+  color: var(--text2);
+  font-weight: 500;
+  margin-bottom: 3px;
+}
+.review-item-body {
+  font-size: 12px;
+  color: var(--text2);
+  font-weight: 300;
+  line-height: 1.65;
+  word-break: break-word;
+  white-space: pre-wrap;
+  user-select: text;
+}
 .quote-meta {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -624,6 +654,17 @@ body {
       </thead>
       <tbody id="competitive-tbody"></tbody>
     </table>
+  </div>
+
+  <div class="section-heading all-reviews-heading" onclick="toggleAllReviews()" style="cursor:pointer">
+    all reviews — this period <span id="all-reviews-toggle" style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">▸ show</span>
+  </div>
+  <div id="all-reviews-section" style="display:none;margin-bottom:32px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <span id="all-reviews-count" style="font-family:var(--font-mono);font-size:11px;color:var(--text3)"></span>
+      <button onclick="copyAllReviews()" style="font-family:var(--font-mono);font-size:10px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:4px 10px;border-radius:4px;cursor:pointer">Copy all</button>
+    </div>
+    <div id="all-reviews-list"></div>
   </div>
 
   <div class="section-heading">8-week trend</div>
@@ -2100,6 +2141,7 @@ function render() {
   renderIssuesTable(currThemes, prevMap, recurringMap);
   renderCompetitive(range);
   renderTrend(allReviews, weekBuckets);
+  renderAllReviewsList(curr);
 
   document.getElementById('header-updated').textContent =
     new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -2329,6 +2371,41 @@ function toggleQuotes(row) {
       if (track) track.style.display = 'none';
     }
   }
+}
+
+function renderAllReviewsList(reviews) {
+  const sorted = [...reviews].sort((a, b) => b.date - a.date);
+  document.getElementById('all-reviews-count').textContent = `${sorted.length} reviews`;
+  const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+  document.getElementById('all-reviews-list').innerHTML = sorted.map(r =>
+    `<div class="review-item">
+      <div class="review-item-meta">${stars(r.rating)} &nbsp; ${r.dateStr}</div>
+      ${r.title ? `<div class="review-item-title">${r.title}</div>` : ''}
+      <div class="review-item-body">${r.content}</div>
+    </div>`
+  ).join('');
+}
+
+function toggleAllReviews() {
+  const section = document.getElementById('all-reviews-section');
+  const toggle = document.getElementById('all-reviews-toggle');
+  const open = section.style.display !== 'none';
+  section.style.display = open ? 'none' : 'block';
+  toggle.textContent = open ? '▸ show' : '▾ hide';
+}
+
+function copyAllReviews() {
+  const reviews = [...document.querySelectorAll('.review-item')].map(el => {
+    const meta = el.querySelector('.review-item-meta')?.textContent.trim() || '';
+    const title = el.querySelector('.review-item-title')?.textContent.trim() || '';
+    const body = el.querySelector('.review-item-body')?.textContent.trim() || '';
+    return [meta, title, body].filter(Boolean).join('\n');
+  }).join('\n\n---\n\n');
+  navigator.clipboard.writeText(reviews).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy all', 1500);
+  });
 }
 
 function renderCompetitive(range) {
