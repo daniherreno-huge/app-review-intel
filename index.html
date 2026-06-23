@@ -209,6 +209,12 @@ body {
   align-items: center;
   gap: 10px;
 }
+.sec-toggle {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text3);
+  margin-left: 8px;
+}
 .section-heading::after {
   content: '';
   flex: 1;
@@ -630,8 +636,10 @@ body {
     <div id="all-reviews-list" style="max-height:520px;overflow-y:scroll;scrollbar-width:thin;scrollbar-color:var(--border2) var(--bg3);padding-right:4px"></div>
   </div>
 
-  <div class="section-heading">what changed</div>
-  <div class="delta-section" id="delta-section"></div>
+  <div class="section-heading" onclick="toggleSection('what-changed-body',this)" style="cursor:pointer">what changed <span class="sec-toggle">▸</span></div>
+  <div id="what-changed-body" style="display:none">
+    <div class="delta-section" id="delta-section"></div>
+  </div>
 
   <div class="section-heading">all issues — this period</div>
   <div class="table-scroll">
@@ -651,36 +659,40 @@ body {
     </table>
   </div>
 
-  <div class="section-heading">My Epic vs Ikon — this period</div>
-  <p class="comp-summary-text" id="comp-summary"></p>
-  <div class="table-scroll">
-    <table class="comp-table">
-      <thead>
-        <tr>
-          <th>Issue</th>
-          <th style="text-align:center">My Epic %</th>
-          <th style="text-align:center">Ikon %</th>
-          <th style="text-align:right">Signal</th>
-        </tr>
-      </thead>
-      <tbody id="competitive-tbody"></tbody>
-    </table>
+  <div class="section-heading" onclick="toggleSection('competitive-body',this)" style="cursor:pointer">My Epic vs Ikon — this period <span class="sec-toggle">▸</span></div>
+  <div id="competitive-body" style="display:none">
+    <p class="comp-summary-text" id="comp-summary"></p>
+    <div class="table-scroll">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>Issue</th>
+            <th style="text-align:center">My Epic %</th>
+            <th style="text-align:center">Ikon %</th>
+            <th style="text-align:right">Signal</th>
+          </tr>
+        </thead>
+        <tbody id="competitive-tbody"></tbody>
+      </table>
+    </div>
   </div>
 
-  <div class="section-heading">8-week trend</div>
-  <p class="trend-note">Oldest → newest. % of reviews mentioning each issue per week. Thin weeks (&lt;3 reviews) are skipped.</p>
-  <div class="table-scroll">
-    <table class="trend-table">
-      <thead>
-        <tr>
-          <th>Issue</th>
-          <th>Trend</th>
-          <th style="text-align:right">Peak</th>
-          <th style="text-align:right">Low</th>
-        </tr>
-      </thead>
-      <tbody id="trend-tbody"></tbody>
-    </table>
+  <div class="section-heading" onclick="toggleSection('trend-body',this)" style="cursor:pointer">8-week trend <span class="sec-toggle">▸</span></div>
+  <div id="trend-body" style="display:none">
+    <p class="trend-note">Oldest → newest. % of reviews mentioning each issue per week. Thin weeks (&lt;3 reviews) are skipped.</p>
+    <div class="table-scroll">
+      <table class="trend-table">
+        <thead>
+          <tr>
+            <th>Issue</th>
+            <th>Trend</th>
+            <th style="text-align:right">Peak</th>
+            <th style="text-align:right">Low</th>
+          </tr>
+        </thead>
+        <tbody id="trend-tbody"></tbody>
+      </table>
+    </div>
   </div>
 
 </div>
@@ -2281,6 +2293,14 @@ function renderIssuesTable(currThemes, prevMap, recurringMap) {
     ${quotesHtml ? `<tr class="quotes-row" style="display:none"><td colspan="7"><div class="quotes-wrapper"><div class="quotes-container" id="qc-${i}" onscroll="syncScrollbar(this)">${quotesHtml}</div><div class="quotes-fade"></div><div class="cscroll-track" id="cst-${i}"><div class="cscroll-thumb" id="csb-${i}"></div></div></div></td></tr>` : ''}`;
   });
   document.getElementById('issues-tbody').innerHTML = rows.join('');
+}
+
+function toggleSection(id, heading) {
+  const body = document.getElementById(id);
+  const toggle = heading.querySelector('.sec-toggle');
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'block';
+  if (toggle) toggle.textContent = open ? '▸' : '▾';
 }
 
 function syncScrollbar(container) {
