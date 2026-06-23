@@ -619,6 +619,17 @@ body {
     </div>
   </div>
 
+  <div class="section-heading all-reviews-heading" onclick="toggleAllReviews()" style="cursor:pointer">
+    all reviews — this period <span id="all-reviews-toggle" style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">▸ show</span>
+  </div>
+  <div id="all-reviews-section" style="display:none;margin-bottom:32px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <span id="all-reviews-count" style="font-family:var(--font-mono);font-size:11px;color:var(--text3)"></span>
+      <button onclick="copyAllReviews()" style="font-family:var(--font-mono);font-size:10px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:4px 10px;border-radius:4px;cursor:pointer">Copy all</button>
+    </div>
+    <div id="all-reviews-list"></div>
+  </div>
+
   <div class="section-heading">what changed</div>
   <div class="delta-section" id="delta-section"></div>
 
@@ -654,17 +665,6 @@ body {
       </thead>
       <tbody id="competitive-tbody"></tbody>
     </table>
-  </div>
-
-  <div class="section-heading all-reviews-heading" onclick="toggleAllReviews()" style="cursor:pointer">
-    all reviews — this period <span id="all-reviews-toggle" style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">▸ show</span>
-  </div>
-  <div id="all-reviews-section" style="display:none;margin-bottom:32px">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-      <span id="all-reviews-count" style="font-family:var(--font-mono);font-size:11px;color:var(--text3)"></span>
-      <button onclick="copyAllReviews()" style="font-family:var(--font-mono);font-size:10px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:4px 10px;border-radius:4px;cursor:pointer">Copy all</button>
-    </div>
-    <div id="all-reviews-list"></div>
   </div>
 
   <div class="section-heading">8-week trend</div>
