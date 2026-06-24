@@ -2376,8 +2376,7 @@ function renderIssuesTable(currThemes, prevMap, recurringMap) {
       ? `<span class="weeks-badge">${rec.weeksElevated}w</span>`
       : '<span style="color:var(--text3)">—</span>';
 
-    const quotesHtml = theme.quotes.map(q =>
-      `<div class="quote-row">[${q.rating}★ · ${q.dateStr}] "${q.title}" — ${q.content}</div>`).join('');
+    const quotesHtml = theme.quotes.map(q => renderQuoteCard(q)).join('');
 
     return `<tr class="issue-row" onclick="toggleQuotes(this)">
       <td class="rank">${i + 1}</td>
