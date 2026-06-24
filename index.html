@@ -2395,6 +2395,9 @@ function toggleQuotes(row) {
     row.classList.toggle('expanded', !open);
     const hint = row.querySelector('.expand-hint');
     if (hint) hint.textContent = open ? '▸ quotes' : '▾ quotes';
+    if (!open) {
+      setTimeout(() => row.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 0);
+    }
   }
 }
 
