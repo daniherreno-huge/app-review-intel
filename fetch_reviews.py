@@ -72,6 +72,7 @@ def fetch_appstore_reviews(app_id: str, since_date) -> list:
                 "title": title,
                 "content": content,
                 "date": date_str,
+                "platform": "ios",
             })
 
         if found_old:
@@ -111,6 +112,7 @@ def fetch_gplay_reviews(package_id: str, since_date) -> list:
                 "title": title or content[:30],
                 "content": content,
                 "date": date_str,
+                "platform": "android",
             })
     except Exception as e:
         print(f"  [Google Play] error: {e}", file=sys.stderr)
@@ -125,7 +127,7 @@ def format_review_lines(reviews: list) -> str:
         content = r["content"].replace("|", "-").replace("`", "'").strip()
         if not title and not content:
             continue
-        lines.append(f"{stars(r['rating'])} | {r['date']} | {title} | {content}")
+        lines.append(f"{stars(r['rating'])} | {r['date']} | {title} | {content} | {r['platform']}")
     return "\n".join(lines)
 
 
