@@ -2270,7 +2270,8 @@ function renderOpportunities(themes) {
     if (!theme) continue;
     const quotes = def.filter ? theme.quotes.filter(def.filter) : theme.quotes;
     if (!quotes.length) continue;
-    const allQuotesHtml = quotes.map(q => renderQuoteCard(q)).join('');
+    const allQuotesHtml = quotes.map(q =>
+      `<div class="quote-row">[${q.rating}★ · ${q.dateStr}] "${q.title}" — ${q.content}</div>`).join('');
     rows.push(`<div class="opp-item" onclick="this.classList.toggle('open')">
       <div class="opp-num">${String(rows.length + 1).padStart(2, '0')}</div>
       <div class="opp-body">
@@ -2376,7 +2377,8 @@ function renderIssuesTable(currThemes, prevMap, recurringMap) {
       ? `<span class="weeks-badge">${rec.weeksElevated}w</span>`
       : '<span style="color:var(--text3)">—</span>';
 
-    const quotesHtml = theme.quotes.map(q => renderQuoteCard(q)).join('');
+    const quotesHtml = theme.quotes.map(q =>
+      `<div class="quote-row">[${q.rating}★ · ${q.dateStr}] "${q.title}" — ${q.content}</div>`).join('');
 
     return `<tr class="issue-row" onclick="toggleQuotes(this)">
       <td class="rank">${i + 1}</td>
