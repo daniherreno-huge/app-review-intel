@@ -634,8 +634,6 @@ body {
           <th>This period</th>
           <th>Δ vs prev</th>
           <th>Weeks high</th>
-          <th>Ticket</th>
-          <th>Jira</th>
         </tr>
       </thead>
       <tbody id="issues-tbody"></tbody>
@@ -2383,13 +2381,8 @@ function renderIssuesTable(currThemes, prevMap, recurringMap) {
       <td class="pct-cell"><span class="pct-badge ${theme.type}">${theme.pctDisplay}%</span></td>
       <td>${deltaHtml}</td>
       <td>${weeksHtml}</td>
-      <td>${badgeHtml}</td>
-      <td class="jira-cell" onclick="event.stopPropagation()">
-        <input type="text" class="jira-input" placeholder="EPIC-000" value="${jira}"
-          onchange="setJiraLink('${currentApp}', '${theme.name.replace(/'/g, "\\'")}', this.value)">
-      </td>
     </tr>
-    ${quotesHtml ? `<tr class="quotes-row" style="display:none"><td colspan="7"><div class="quotes-container">${quotesHtml}</div></td></tr>` : ''}`;
+    ${quotesHtml ? `<tr class="quotes-row" style="display:none"><td colspan="5"><div class="quotes-container">${quotesHtml}</div></td></tr>` : ''}`;
   });
   document.getElementById('issues-tbody').innerHTML = rows.join('');
 }
