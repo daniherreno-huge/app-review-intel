@@ -147,8 +147,8 @@ def update_html(app_key: str, new_lines: str):
             if key and key not in seen:
                 seen.add(key)
                 deduped.append(line)
-        # Cap at 300 reviews to keep the file manageable
-        return m.group(1) + "\n".join(deduped[:300]) + m.group(3)
+        # Cap at 1500 reviews per app
+        return m.group(1) + "\n".join(deduped[:1500]) + m.group(3)
 
     updated = re.sub(pattern, replacer, html, flags=re.DOTALL)
     HTML_PATH.write_text(updated, encoding="utf-8")
