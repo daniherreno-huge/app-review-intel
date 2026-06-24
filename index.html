@@ -609,8 +609,8 @@ body {
   <div class="sentiment-bar" id="sentiment-bar"></div>
   <div class="sent-caveat">based on star rating — read reviews for full context</div>
 
-  <div class="section-heading" onclick="toggleSection('all-reviews-section',this)" style="cursor:pointer">all reviews — this period <span class="sec-toggle">▾</span></div>
-  <div id="all-reviews-section" style="margin-bottom:32px">
+  <div class="section-heading" onclick="toggleSection('all-reviews-section',this)" style="cursor:pointer">all reviews — this period <span class="sec-toggle">▸</span></div>
+  <div id="all-reviews-section" style="margin-bottom:32px;display:none">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
       <span id="all-reviews-count" style="font-family:var(--font-mono);font-size:11px;color:var(--text3)"></span>
       <button onclick="copyAllReviews()" style="font-family:var(--font-mono);font-size:10px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:4px 10px;border-radius:4px;cursor:pointer">Copy all</button>
@@ -623,9 +623,9 @@ body {
     <div class="digest-block" id="digest-text"></div>
   </div>
 
-  <div class="section-heading" onclick="toggleSection('issues-section',this)" style="cursor:pointer">all issues — this period <span class="sec-toggle">▸</span></div>
-  <div id="issues-section" style="display:none">
-  <div class="table-scroll">
+  <div class="section-heading" onclick="toggleSection('issues-section',this)" style="cursor:pointer">all issues — this period <span class="sec-toggle">▾</span></div>
+  <div id="issues-section">
+  <div class="table-scroll" style="max-height:420px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border2) var(--bg3)">
     <table class="issues-table">
       <thead>
         <tr>
