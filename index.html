@@ -480,6 +480,77 @@ body {
   .controls-bar { flex-direction: column; align-items: flex-start; }
   .header { flex-direction: column; gap: 12px; }
 }
+
+/* Platform badges */
+.platform-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.platform-badge.ios { background: #1c2e40; color: #4a9eda; border: 1px solid #2a4a6b; }
+.platform-badge.android { background: #1a2e1a; color: #5cb85c; border: 1px solid #2a4a2a; }
+
+/* Sentiment */
+.sentiment-bar { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 6px; }
+.sent-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; }
+.sent-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+.sent-pct { font-family: var(--font-mono); font-size: 22px; font-weight: 700; }
+.sent-pct.negative { color: #e05c5c; }
+.sent-pct.mixed { color: #c8a040; }
+.sent-pct.positive { color: var(--accent); }
+.sent-count { font-family: var(--font-mono); font-size: 10px; color: var(--text3); }
+.sent-label { font-size: 11px; color: var(--text2); margin-bottom: 6px; }
+.sent-track { height: 3px; background: var(--border); border-radius: 2px; }
+.sent-fill { height: 3px; border-radius: 2px; }
+.sent-fill.negative { background: #e05c5c; }
+.sent-fill.mixed { background: #c8a040; }
+.sent-fill.positive { background: var(--accent); }
+.sent-caveat { font-size: 10px; color: var(--text3); margin-bottom: 20px; font-family: var(--font-mono); }
+
+/* Digest */
+.digest-block { margin-bottom: 24px; border-left: 2px solid var(--border2); padding-left: 16px; }
+.digest-q { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); margin-top: 14px; margin-bottom: 4px; }
+.digest-q:first-child { margin-top: 0; }
+.digest-a { font-size: 13px; color: var(--text2); font-weight: 300; line-height: 1.6; }
+.digest-a strong { color: var(--text); font-weight: 500; }
+
+/* Top Opportunities */
+.opp-list { display: flex; flex-direction: column; gap: 2px; margin-bottom: 24px; }
+.opp-item { display: flex; gap: 16px; padding: 12px 14px; border-radius: 6px; background: var(--bg2); border: 1px solid var(--border); cursor: pointer; transition: border-color 0.15s; }
+.opp-item:hover { border-color: var(--border2); }
+.opp-item.open { border-color: var(--border2); }
+.opp-num { font-family: var(--font-mono); font-size: 11px; color: var(--text3); min-width: 24px; padding-top: 2px; }
+.opp-body { flex: 1; min-width: 0; }
+.opp-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+.opp-desc { font-size: 12px; color: var(--text2); font-weight: 300; line-height: 1.5; margin-bottom: 8px; }
+.opp-meta { display: flex; align-items: center; gap: 10px; }
+.opp-tag { font-family: var(--font-mono); font-size: 9px; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.05em; }
+.opp-tag.bug { background: rgba(224,92,92,0.15); color: #e05c5c; border: 1px solid rgba(224,92,92,0.3); }
+.opp-tag.ux { background: rgba(200,160,64,0.15); color: #c8a040; border: 1px solid rgba(200,160,64,0.3); }
+.opp-tag.feature { background: rgba(100,180,100,0.12); color: #5cb85c; border: 1px solid rgba(100,180,100,0.3); }
+.opp-tag.intel { background: rgba(74,158,218,0.12); color: #4a9eda; border: 1px solid rgba(74,158,218,0.3); }
+.opp-mentions { font-family: var(--font-mono); font-size: 10px; color: var(--text3); }
+.opp-expand { font-family: var(--font-mono); font-size: 10px; color: var(--text3); margin-left: auto; }
+.opp-quotes { display: none; margin-top: 12px; }
+.opp-item.open .opp-quotes { display: block; }
+.opp-item.open .opp-expand { display: none; }
+.quote-row { padding: 8px 0; border-top: 1px solid var(--border); }
+.quote-row:first-child { border-top: none; }
+.quote-meta { font-family: var(--font-mono); font-size: 10px; color: var(--text3); margin-bottom: 4px; }
+.quote-title { color: var(--text2); }
+.quote-body { font-size: 12px; color: var(--text2); font-weight: 300; line-height: 1.5; }
+
+/* Section toggle */
+.sec-toggle { font-size: 10px; }
+.review-item { padding: 10px 0; border-bottom: 1px solid var(--border); }
+.review-item:last-child { border-bottom: none; }
+.review-item-meta { font-family: var(--font-mono); font-size: 10px; color: var(--text3); margin-bottom: 4px; }
+.review-item-title { font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 3px; }
+.review-item-body { font-size: 12px; color: var(--text2); font-weight: 300; line-height: 1.5; }
 </style>
 </head>
 <body>
@@ -506,20 +577,14 @@ body {
       </div>
     </div>
     <div class="win-tabs">
-      <button class="win-btn" data-win="w7" onclick="selectWindow('w7', this)">7d</button>
       <button class="win-btn" data-win="w14" onclick="selectWindow('w14', this)">14d</button>
-      <button class="win-btn active" data-win="m1" onclick="selectWindow('m1', this)">30d</button>
-      <button class="win-btn" data-win="all" onclick="selectWindow('all', this)">All</button>
-      <button class="win-btn" data-win="custom" onclick="selectWindow('custom', this)">Custom</button>
+      <button class="win-btn" data-win="m1" onclick="selectWindow('m1', this)">30d</button>
+      <button class="win-btn active" data-win="all" onclick="selectWindow('all', this)">All time</button>
     </div>
   </div>
 
-  <div class="custom-range" id="custom-range">
-    <span>From</span>
-    <input type="date" id="custom-start">
-    <span>to</span>
-    <input type="date" id="custom-end">
-    <button class="btn-apply" onclick="applyCustomRange()">Apply</button>
+  <div id="unclassified-banner" style="display:none;margin-bottom:16px;padding:10px 14px;border-radius:6px;border:1px solid var(--border2);background:rgba(255,200,80,0.06);font-family:var(--font-mono);font-size:11px;color:var(--text2);line-height:1.6">
+    <span style="color:#f5c542;font-weight:600" id="unclassified-count"></span> — themes, opportunities, and digest reflect previously analyzed reviews only. Run <code style="background:var(--bg3);padding:1px 5px;border-radius:3px">/update-reviews</code> in Claude Code to analyze them.
   </div>
 
   <div class="summary-bar">
@@ -535,16 +600,31 @@ body {
       <div class="sum-num" id="sum-period" style="font-size:14px;padding-top:4px;">—</div>
       <div class="sum-lbl">period</div>
     </div>
-    <div class="sum-card">
+    <div class="sum-card" id="sum-delta-card">
       <div class="sum-num sum-delta" id="sum-delta">—</div>
       <div class="sum-lbl">vs prev period</div>
     </div>
   </div>
 
-  <div class="section-heading">what changed</div>
-  <div class="delta-section" id="delta-section"></div>
+  <div class="sentiment-bar" id="sentiment-bar"></div>
+  <div class="sent-caveat">based on star rating — read reviews for full context</div>
 
-  <div class="section-heading">all issues — this period</div>
+  <div class="section-heading" onclick="toggleSection('all-reviews-section',this)" style="cursor:pointer">all reviews — this period <span class="sec-toggle">▾</span></div>
+  <div id="all-reviews-section" style="margin-bottom:32px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <span id="all-reviews-count" style="font-family:var(--font-mono);font-size:11px;color:var(--text3)"></span>
+      <button onclick="copyAllReviews()" style="font-family:var(--font-mono);font-size:10px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:4px 10px;border-radius:4px;cursor:pointer">Copy all</button>
+    </div>
+    <div id="all-reviews-list" style="max-height:520px;overflow-y:scroll;scrollbar-width:thin;scrollbar-color:var(--border2) var(--bg3);padding-right:4px"></div>
+  </div>
+
+  <div class="section-heading" onclick="toggleSection('digest-body',this)" style="cursor:pointer">digest <span class="sec-toggle">▸</span></div>
+  <div id="digest-body" style="display:none">
+    <div class="digest-block" id="digest-text"></div>
+  </div>
+
+  <div class="section-heading" onclick="toggleSection('issues-section',this)" style="cursor:pointer">all issues — this period <span class="sec-toggle">▸</span></div>
+  <div id="issues-section" style="display:none">
   <div class="table-scroll">
     <table class="issues-table">
       <thead>
@@ -562,7 +642,18 @@ body {
     </table>
   </div>
 
-  <div class="section-heading">My Epic vs Ikon — this period</div>
+  </div>
+
+  <div class="section-heading" onclick="toggleSection('opps-body',this)" style="cursor:pointer">top opportunities <span class="sec-toggle">▾</span></div>
+  <div id="opps-body">
+    <div id="opps-list"></div>
+  </div>
+
+  <div class="section-heading" onclick="toggleSection('delta-section',this)" style="cursor:pointer">what changed <span class="sec-toggle">▸</span></div>
+  <div id="delta-section" style="display:none"></div>
+
+  <div class="section-heading" onclick="toggleSection('comp-section',this)" style="cursor:pointer">My Epic vs Ikon — this period <span class="sec-toggle">▸</span></div>
+  <div id="comp-section" style="display:none">
   <p class="comp-summary-text" id="comp-summary"></p>
   <div class="table-scroll">
     <table class="comp-table">
@@ -577,8 +668,10 @@ body {
       <tbody id="competitive-tbody"></tbody>
     </table>
   </div>
+  </div>
 
-  <div class="section-heading">8-week trend</div>
+  <div class="section-heading" onclick="toggleSection('trend-section',this)" style="cursor:pointer">8-week trend <span class="sec-toggle">▸</span></div>
+  <div id="trend-section" style="display:none">
   <p class="trend-note">Oldest → newest. % of reviews mentioning each issue per week. Thin weeks (&lt;3 reviews) are skipped.</p>
   <div class="table-scroll">
     <table class="trend-table">
@@ -592,6 +685,7 @@ body {
       </thead>
       <tbody id="trend-tbody"></tbody>
     </table>
+  </div>
   </div>
 
 </div>
@@ -897,7 +991,7 @@ I don’t see this on other apps
 ★☆☆☆☆ | 2026-02-05 | Paul Reeser | app frequently loses my Epic pass number. The tracking function doesn't get every lift, so it's totals are wrong. Customer support is less than helpful. Can't think of how I've benefitted from this app. | gps_tracking
 ★☆☆☆☆ | 2026-02-05 | Aditya Nishtala | slow app, and I have a Samsung S25 no its not internet speed its slow on my home 1Gig wifi too. | slow_performance
 ★☆☆☆☆ | 2026-02-04 | Jon Krieg | when I try to enable the pass in my settings it will briefly come on and then turn back off. I've talked to tech support with Keystone and everything they told me to try I've done and it doesn't work. also when I asked them for a physical pass they want to charge to send it to me. overall and unsatisfactory experience. | pass_display
-★★☆☆☆ | 2026-02-04 | flv320 | Crashes often, doesn't work well. Doesn't track all activities, very unreliable`, | crash
+★★☆☆☆ | 2026-02-04 | flv320 | Crashes often, doesn't work well. Doesn't track all activities, very unreliable. | crash`,
   ikon: `★★★★★ | 2026-05-01 | Open runs filter | I decided to try Ikon Pass instead of Epic Pass this year, and overall I really like the app. The interface is clean, easy to use, and everything feels well designed.
 The only major downside for me is that I can’t filter or clearly see open runs and lifts directly on the map. In the Epic app, this feature is very convenient and makes a big difference.
 With Ikon, I often have to check other websites or the resort’s page to see what’s actually open, which isn’t very convenient.
@@ -1212,20 +1306,48 @@ Also suggest you link directly to Open Snow for better forecasts
 ★☆☆☆☆ | 2025-08-21 | George Chen | App opens but clicking the "Sign In" does nothing, nor does clicking "Create An Account". The "Sign In" button darkens as to register a click, but then does nothing | crash
 ★☆☆☆☆ | 2025-08-04 | Verify Email | Trying to upload a photo by the 8/8 deadline to get my pass in the mail. I go into the ikon app, click the link that prompts me to add a photo. Takes me out of the app into my browser. Then prompts me to verify my email before I can do literally anything on the Ikon site in my safari browser. I click the link to verify my email only to receive an unknown error that something went wrong. How can you be this bad. | bad_ux
 ★☆☆☆☆ | 2025-08-04 | Allie | App's sign in button is broken, so I can't use it. | crash
-★☆☆☆☆ | 2025-07-22 | Inconsistent | Some maps show live lift times some don’t. some you can zoom in or interact with, some you can’t. The app also tracks way too much data when you’re not using it` | bad_ux
+★☆☆☆☆ | 2025-07-22 | Inconsistent | Some maps show live lift times some don’t. some you can zoom in or interact with, some you can’t. The app also tracks way too much data when you’re not using it. | bad_ux`
 };
 
 // ─── State ───────────────────────────────────────────────────────────────────
 let currentApp = 'vail';
-let currentWindow = 'm1';
+let currentWindow = 'all';
 let customStart = null, customEnd = null;
 const parsedCache = {};
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+function platformBadge(platform) {
+  if (!platform) return '';
+  const label = platform === 'ios' ? 'iOS' : 'Android';
+  return `<span class="platform-badge ${platform}">${label}</span>`;
+}
+function renderQuoteCard(q) {
+  const stars = '★'.repeat(q.rating) + '☆'.repeat(5 - q.rating);
+  const titleHtml = q.title && q.title !== q.content.slice(0, 30)
+    ? ` &nbsp;·&nbsp; <span class="quote-title">${q.title}</span>` : '';
+  return `<div class="quote-row">
+    <div class="quote-meta">${stars} &nbsp;${q.dateStr}${titleHtml}${platformBadge(q.platform)}</div>
+    <div class="quote-body">${q.content}</div>
+  </div>`;
+}
+function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+function toggleSection(id, heading) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const toggle = heading ? heading.querySelector('.sec-toggle') : null;
+  const hidden = el.style.display === 'none';
+  el.style.display = hidden ? '' : 'none';
+  if (toggle) toggle.textContent = hidden ? '▾' : '▸';
+}
 
 // ─── Parse ───────────────────────────────────────────────────────────────────
 function getAllReviews(appKey) {
   if (!parsedCache[appKey]) parsedCache[appKey] = parseReviews(appData[appKey] || '');
   return parsedCache[appKey];
 }
+
+const KNOWN_PLATFORMS = new Set(['ios', 'android']);
+const KNOWN_CATEGORIES = new Set(['none','pass_display','crash','gps_tracking','regression','bad_ux','positive','notification_spam','slow_performance','competitor_better','feature_request']);
 
 function parseReviews(text) {
   const reviews = [];
@@ -1235,12 +1357,29 @@ function parseReviews(text) {
     if (!line) continue;
     const m = line.match(/^(★+)(☆*)\s*\|\s*(\d{4}-\d{2}-\d{2})\s*\|\s*(.+?)\s*\|\s*(.*)/);
     if (m) {
+      const rating = m[1].length;
+      const dateStr = m[3];
+      const title = m[4].trim();
+      // remaining pipe-separated fields after title
+      const rest = m[5];
+      const parts = rest.split('|').map(p => p.trim());
+      let platform = null;
+      let category = null;
+      const contentParts = [];
+      for (const part of parts) {
+        const lower = part.toLowerCase();
+        if (!platform && KNOWN_PLATFORMS.has(lower)) { platform = lower; continue; }
+        if (!category && KNOWN_CATEGORIES.has(lower)) { category = lower; continue; }
+        if (part) contentParts.push(part);
+      }
       current = {
-        rating: m[1].length,
-        dateStr: m[3],
-        date: new Date(m[3] + 'T12:00:00'),
-        title: m[4].trim(),
-        content: m[5].trim(),
+        rating,
+        dateStr,
+        date: new Date(dateStr + 'T12:00:00'),
+        title,
+        content: contentParts.join(' ').trim(),
+        platform,
+        category,
       };
       current.full = (current.title + ' ' + current.content).toLowerCase();
       reviews.push(current);
@@ -1264,11 +1403,7 @@ function getReferenceDate() {
 function getDateRange() {
   const today = getReferenceDate();
   if (currentWindow === 'all') return { curr: { start: new Date(0), end: today }, prev: null };
-  if (currentWindow === 'custom') {
-    if (!customStart || !customEnd) return null;
-    return { curr: { start: new Date(customStart + 'T00:00:00'), end: new Date(customEnd + 'T23:59:59') }, prev: null };
-  }
-  const days = { w7: 7, w14: 14, m1: 30 }[currentWindow];
+  const days = currentWindow === 'w14' ? 14 : 30;
   const currEnd = new Date(today);
   const currStart = new Date(today); currStart.setDate(currStart.getDate() - days);
   const prevEnd = new Date(currStart);
@@ -1277,65 +1412,33 @@ function getDateRange() {
 }
 
 // ─── Theme definitions ───────────────────────────────────────────────────────
-const THEME_DEFS = [
-  { name: 'GPS & Stat Tracking', type: 'critical', ratingMax: 3,
-    keywords: ['gps', 'tracking', 'track', 'stat', 'vertical', 'distance', 'elevation', 'speed', 'lifts missed', 'lift count', 'recording'],
-    ticketType: 'Bug' },
-  { name: 'Login & Session Drops', type: 'critical', ratingMax: 3,
-    keywords: ['log out', 'login', 'sign in', 'password', 'face id', 'logs out', 'logged out', 'session', 'locked out', 'fingerprint', 'credential'],
-    ticketType: 'Bug' },
-  { name: 'Crashes & Broken Updates', type: 'critical', ratingMax: 3,
-    keywords: ['crash', 'broken', 'broke', 'freeze', 'stopped working', 'update broke', 'nothing works', 'reinstall', 'busted', 'not working', 'white screen', 'blank'],
-    ticketType: 'Bug' },
-  { name: 'Pass & Lift Scanning', type: 'critical', ratingMax: 3,
-    keywords: ['scan', 'bluetooth', 'lift ticket', 'lift line', 'pass scan', 'barcode', 'ticket counter', 'hard card', 'load my pass', 'show pass', 'physical'],
-    ticketType: 'Bug' },
-  { name: 'Favorites Not Saving', type: 'critical', ratingMax: 3,
-    keywords: ['favorite', 'favourit', 'home mountain', 'save resort', "doesn't save", "don't save", 'reset favorites', 're-add', 'reselect', 'forget'],
-    ticketType: 'Bug' },
-  { name: 'Maps & Trail Info', type: 'friction', ratingMax: 3,
-    keywords: ['map', 'trail', 'offline map', '3d map', 'trail map', 'open trail', 'lift status', 'open lift', 'resort map'],
-    ticketType: 'Story' },
-  { name: 'UI/UX & Navigation', type: 'friction', ratingMax: 3,
-    keywords: ['ui', 'ux', 'interface', 'navigation', 'navigate', 'clunky', 'confusing', 'design', 'clicks', 'buried', 'hard to find', 'intuitive', 'layout', 'usability', 'complicated'],
-    ticketType: 'Story' },
-  { name: 'Friend & Group Tracking', type: 'friction', ratingMax: 3,
-    keywords: ['friend', 'group', 'find my', 'social', 'location sharing', 'invite', 'family', 'party tracking'],
-    ticketType: 'Story' },
-  { name: 'Battery Drain', type: 'friction', ratingMax: 3,
-    keywords: ['battery', 'drain', 'power', 'phone died', 'battery life', 'kills battery'],
-    ticketType: 'Story' },
-  { name: 'Pricing & Refund Frustration', type: 'friction', ratingMax: 2,
-    keywords: ['refund', 'non refundable', 'scam', 'auto renew', 'automatically renewed'],
-    ticketType: 'Story' },
-  { name: 'Positive Experience', type: 'positive', ratingMin: 4,
-    keywords: [], ticketType: null },
-  { name: 'Competitor Mentions', type: 'neutral',
-    keywords: ['slopes', 'strava', 'onthesnow', 'on the snow', 'palisades app', 'resort app', 'specific app', 'mountain app', 'old app', 'previous app'],
-    ticketType: null },
+const CATEGORY_THEMES = [
+  { name: 'Crashes & Broken Updates', category: 'crash',            type: 'critical', ticketType: 'Bug' },
+  { name: 'GPS & Stat Tracking',      category: 'gps_tracking',     type: 'critical', ticketType: 'Bug' },
+  { name: 'Pass & Lift Scanning',     category: 'pass_display',     type: 'critical', ticketType: 'Bug' },
+  { name: 'Regressions',              category: 'regression',       type: 'critical', ticketType: 'Bug' },
+  { name: 'Push Notifications',       category: 'notification_spam',type: 'critical', ticketType: 'Bug' },
+  { name: 'Slow Performance',         category: 'slow_performance', type: 'friction', ticketType: 'Story' },
+  { name: 'UI/UX & Navigation',       category: 'bad_ux',           type: 'friction', ticketType: 'Story' },
+  { name: 'Feature Requests',         category: 'feature_request',  type: 'neutral',  ticketType: 'Story' },
+  { name: 'Competitor Mentions',      category: 'competitor_better',type: 'neutral',  ticketType: null },
+  { name: 'Positive Experience',      category: 'positive',         type: 'positive', ticketType: null },
 ];
-
-function matchesTheme(review, def) {
-  if (def.type === 'positive') return review.rating >= (def.ratingMin || 4);
-  if (def.ratingMax && review.rating > def.ratingMax) return false;
-  if (def.ratingMin && review.rating < def.ratingMin) return false;
-  return def.keywords.some(kw => review.full.includes(kw));
-}
 
 function analyzeThemes(reviews) {
   const total = reviews.length;
   if (!total) return [];
   const results = [];
-  for (const def of THEME_DEFS) {
-    const matched = reviews.filter(r => matchesTheme(r, def));
+  for (const def of CATEGORY_THEMES) {
+    const matched = reviews.filter(r => r.category === def.category);
     if (!matched.length) continue;
-    const quotes = matched.filter(r => r.content.length > 20).slice(0, 3)
-      .map(r => `[${r.rating}★ · ${r.dateStr}] "${r.title}" — ${r.content}`);
+    const quotes = matched.filter(r => r.content.length > 20)
+      .map(r => ({ rating: r.rating, dateStr: r.dateStr, title: r.title, content: r.content, platform: r.platform }));
     results.push({ name: def.name, type: def.type, count: matched.length,
       pct: matched.length / total, pctDisplay: Math.round(matched.length / total * 100),
       quotes, ticketType: def.ticketType, def });
   }
-  const order = { critical: 0, friction: 1, positive: 2, neutral: 3 };
+  const order = { critical: 0, friction: 1, neutral: 2, positive: 3 };
   results.sort((a, b) => (order[a.type] ?? 9) - (order[b.type] ?? 9) || b.pct - a.pct);
   return results;
 }
@@ -1353,7 +1456,7 @@ function getWeekBuckets(allReviews, n = 8) {
 
 function getThemePct(def, bucket) {
   if (bucket.total < 3) return null;
-  return bucket.reviews.filter(r => matchesTheme(r, def)).length / bucket.total;
+  return bucket.reviews.filter(r => r.category === def.category).length / bucket.total;
 }
 
 function getRecurringInfo(def, weekBuckets) {
@@ -1401,9 +1504,24 @@ function render() {
   const prevThemes = analyzeThemes(prev);
   const weekBuckets = getWeekBuckets(allReviews);
   const prevMap = Object.fromEntries(prevThemes.map(t => [t.name, t]));
-  const recurringMap = Object.fromEntries(THEME_DEFS.map(d => [d.name, getRecurringInfo(d, weekBuckets)]));
+  const recurringMap = Object.fromEntries(CATEGORY_THEMES.map(d => [d.name, getRecurringInfo(d, weekBuckets)]));
+
+  const unclassified = allReviews.filter(r => !r.category);
+  const banner = document.getElementById('unclassified-banner');
+  if (unclassified.length) {
+    const newest = unclassified.reduce((a, b) => a.date > b.date ? a : b);
+    document.getElementById('unclassified-count').textContent =
+      `${unclassified.length} review${unclassified.length !== 1 ? 's' : ''} fetched since ${newest.dateStr} haven't been analyzed yet`;
+    banner.style.display = 'block';
+  } else {
+    banner.style.display = 'none';
+  }
 
   renderSummary(curr, prev, range);
+  renderSentiment(curr);
+  renderAllReviewsList(curr);
+  renderDigest(curr, currThemes);
+  renderOpportunities(currThemes);
   renderDelta(currThemes, prevMap, recurringMap, !!range.prev, curr.length);
   renderIssuesTable(currThemes, prevMap, recurringMap);
   renderCompetitive(range);
@@ -1418,17 +1536,193 @@ function renderSummary(curr, prev, range) {
   const avg = total ? (curr.reduce((s, r) => s + r.rating, 0) / total).toFixed(1) : '—';
   document.getElementById('sum-total').textContent = total || '—';
   document.getElementById('sum-rating').textContent = total ? avg + ' ★' : '—';
+
+  const isAll = currentWindow === 'all';
   const fmt = d => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  document.getElementById('sum-period').textContent = `${fmt(range.curr.start)} – ${fmt(range.curr.end)}`;
-  const deltaEl = document.getElementById('sum-delta');
-  if (prev.length) {
-    const diff = total - prev.length;
-    deltaEl.textContent = (diff > 0 ? '+' : '') + diff + ' reviews';
-    deltaEl.className = 'sum-num sum-delta ' + (diff >= 0 ? 'pos' : 'neg');
+  if (isAll && total) {
+    const earliest = new Date(Math.min(...curr.map(r => r.date)));
+    const latest = new Date(Math.max(...curr.map(r => r.date)));
+    document.getElementById('sum-period').textContent = `${fmt(earliest)} – ${fmt(latest)}`;
   } else {
-    deltaEl.textContent = '—';
-    deltaEl.className = 'sum-num sum-delta';
+    document.getElementById('sum-period').textContent = `${fmt(range.curr.start)} – ${fmt(range.curr.end)}`;
   }
+
+  const deltaCard = document.getElementById('sum-delta-card');
+  if (deltaCard) {
+    if (isAll) {
+      deltaCard.style.display = 'none';
+    } else {
+      deltaCard.style.display = '';
+      const deltaEl = document.getElementById('sum-delta');
+      if (prev.length) {
+        const diff = total - prev.length;
+        deltaEl.textContent = (diff > 0 ? '+' : '') + diff + ' reviews';
+        deltaEl.className = 'sum-num sum-delta ' + (diff >= 0 ? 'pos' : 'neg');
+      } else {
+        deltaEl.textContent = '—';
+        deltaEl.className = 'sum-num sum-delta';
+      }
+    }
+  }
+}
+
+function renderSentiment(reviews) {
+  const total = reviews.length;
+  const el = document.getElementById('sentiment-bar');
+  if (!total) { el.innerHTML = ''; return; }
+  const neg = reviews.filter(r => r.rating <= 2).length;
+  const mix = reviews.filter(r => r.rating === 3).length;
+  const pos = reviews.filter(r => r.rating >= 4).length;
+  const pct = n => Math.round(n / total * 100);
+  const card = (cls, label, count) => `
+    <div class="sent-card">
+      <div class="sent-header">
+        <span class="sent-pct ${cls}">${pct(count)}%</span>
+        <span class="sent-count">${count} review${count !== 1 ? 's' : ''}</span>
+      </div>
+      <div class="sent-label">${label}</div>
+      <div class="sent-track"><div class="sent-fill ${cls}" style="width:${pct(count)}%"></div></div>
+    </div>`;
+  el.innerHTML =
+    card('negative', '1–2★ negative', neg) +
+    card('mixed',    '3★ mixed',      mix) +
+    card('positive', '4–5★ positive', pos);
+}
+
+function renderAllReviewsList(reviews) {
+  const el = document.getElementById('all-reviews-list');
+  const countEl = document.getElementById('all-reviews-count');
+  if (!el) return;
+  if (!reviews.length) {
+    el.innerHTML = '<div style="color:var(--text3);font-size:12px;padding:12px 0">No reviews for this period.</div>';
+    if (countEl) countEl.textContent = '0 reviews';
+    return;
+  }
+  if (countEl) countEl.textContent = `${reviews.length} review${reviews.length !== 1 ? 's' : ''}`;
+  const sorted = [...reviews].sort((a, b) => b.date - a.date);
+  el.innerHTML = sorted.map(r => {
+    const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+    return `<div class="review-item">
+      <div class="review-item-meta">${stars} &nbsp;${r.dateStr}${platformBadge(r.platform)}</div>
+      ${r.title ? `<div class="review-item-title">${r.title}</div>` : ''}
+      <div class="review-item-body">${r.content}</div>
+    </div>`;
+  }).join('');
+}
+
+function copyAllReviews() {
+  const el = document.getElementById('all-reviews-list');
+  if (!el) return;
+  const text = el.innerText;
+  navigator.clipboard.writeText(text).catch(() => {});
+}
+
+function renderDigest(reviews, themes) {
+  const el = document.getElementById('digest-text');
+  if (!el) return;
+  const total = reviews.length;
+  if (!total) { el.innerHTML = '<div class="digest-q">No data</div><div class="digest-a">Not enough reviews for this period.</div>'; return; }
+
+  const byCategory = {};
+  for (const t of themes) { byCategory[t.def.category] = t; }
+
+  const lines = [];
+
+  const unsolved = ['crash','gps_tracking','pass_display','regression']
+    .map(c => byCategory[c]).filter(Boolean).sort((a,b) => b.count - a.count);
+  if (unsolved.length) {
+    const top = unsolved.slice(0,2).map(t => `<strong>${t.name.toLowerCase()}</strong> (${t.count})`).join(' and ');
+    const rest = unsolved.slice(2).map(t => t.name.toLowerCase()).join(', ');
+    const suffix = rest ? ` Also flagged: ${rest}.` : '';
+    lines.push(`<div class="digest-q">What are we failing to solve?</div><div class="digest-a">${cap(top)} are the most persistent issues — recurring across time periods, not isolated incidents.${suffix}</div>`);
+  }
+
+  const bugs = themes.filter(t => t.def.type === 'critical').sort((a,b) => b.count - a.count);
+  if (bugs.length) {
+    const list = bugs.map(t => `<strong>${t.name}</strong> (${t.count})`).join(', ');
+    lines.push(`<div class="digest-q">What bugs exist right now?</div><div class="digest-a">${list}.</div>`);
+  }
+
+  const comp = byCategory['competitor_better'];
+  if (comp && comp.count > 0) {
+    const sample = comp.quotes.find(q => q.content.length > 30);
+    const excerpt = sample ? ` One user: "${sample.content.slice(0,110).trim()}…"` : '';
+    lines.push(`<div class="digest-q">What do competitors do better?</div><div class="digest-a"><strong>${comp.count} review${comp.count !== 1 ? 's' : ''}</strong> mention a competitor favorably.${excerpt}</div>`);
+  } else {
+    lines.push(`<div class="digest-q">What do competitors do better?</div><div class="digest-a">No competitor mentions in this period.</div>`);
+  }
+
+  const feat = byCategory['feature_request'];
+  if (feat && feat.count > 0) {
+    const examples = feat.quotes.slice(0,3).map(q => (q.title && q.title.length > 3 && q.title !== q.content.slice(0,30) ? q.title : q.content.slice(0,55)).trim()).join('; ');
+    lines.push(`<div class="digest-q">What features are missing?</div><div class="digest-a"><strong>${feat.count} feature request${feat.count !== 1 ? 's' : ''}</strong> logged.${examples ? ` Themes: ${examples}.` : ''}</div>`);
+  }
+
+  const ux = byCategory['bad_ux'];
+  const perf = byCategory['slow_performance'];
+  const uxCount = (ux?.count || 0) + (perf?.count || 0);
+  if (uxCount > 0) {
+    const parts = [ux && `navigation & UI (<strong>${ux.count}</strong>)`, perf && `load performance (<strong>${perf.count}</strong>)`].filter(Boolean).join(' and ');
+    lines.push(`<div class="digest-q">What could work better (UX)?</div><div class="digest-a">${cap(parts)} — <strong>${uxCount}</strong> combined mentions.</div>`);
+  }
+
+  el.innerHTML = lines.join('');
+}
+
+const OPP_DEFS = [
+  { category: 'crash', title: 'Fix app crashes', tag: 'bug', desc: 'App crashes on pass photo upload, on launch, and when switching screens. Highest on Android. Core path is broken for new users trying to activate their pass.' },
+  { category: 'gps_tracking', title: 'Fix GPS & stat tracking', tag: 'bug', desc: 'Tracking silently fails mid-session — zero vertical feet recorded, lifts not counted. Users switch to Strava as a workaround. Happening across both iOS and Android.' },
+  { category: 'pass_display', title: 'Load pass without connectivity', tag: 'bug', desc: 'Pass disappears or fails to load at lift lines, especially with weak mountain signal. Users get turned away or need a physical card backup.' },
+  { category: 'regression',
+    filter: r => /cam|webcam|camera/i.test(r.content + ' ' + r.title),
+    title: 'Mountain webcams broken', tag: 'bug',
+    desc: 'Webcam feeds have stopped working across multiple resorts after recent updates. Users rely on cams to check conditions before heading to the mountain.' },
+  { category: 'regression',
+    filter: r => /stat|vertical|history|days.skied|badge|run.*count|lift.*count|removed|hidden|used to/i.test(r.content + ' ' + r.title),
+    title: 'Stats & history removed or degraded', tag: 'bug',
+    desc: 'Vertical feet, lift counts, and day-tracking that existed in previous versions are now missing, hidden, or unreliable. Users who relied on these for motivation are abandoning the app.' },
+  { category: 'regression',
+    filter: r => !/cam|webcam|camera|stat|vertical|history|days.skied|badge/i.test(r.content + ' ' + r.title),
+    title: 'Updates broke pass & dashboard loading', tag: 'bug',
+    desc: 'Pass display, resort pages, and the dashboard go blank after updates. Users describe the December 2025 update as the worst — nothing loads and the app requires reinstall to function.' },
+  { category: 'notification_spam', title: 'Fix push notification overreach', tag: 'bug', desc: 'App sends marketing notifications even after users disable them in-app. Requires going to OS settings to stop. A trust violation that drives users to disable all notifications.' },
+  { category: 'slow_performance', title: 'Improve load time', tag: 'ux', desc: 'App takes 10+ seconds to load basic screens. White shimmer states appear even on strong wifi. Users give up before reaching pass or resort info.' },
+  { category: 'bad_ux', title: 'Simplify core navigation', tag: 'ux', desc: 'Pass access, trail maps, and tracking are buried multiple taps deep. Key actions require too many steps, especially with gloves on the mountain.' },
+  { category: 'feature_request', title: 'Top feature gaps', tag: 'feature', desc: 'Most requested: offline trail maps, group/friend tracking, and Strava integration for stats export. These features exist in competitor apps.' },
+  { category: 'competitor_better', title: 'Address competitor advantages', tag: 'intel', desc: 'Users explicitly comparing to Ikon or resort-specific apps cite better UI, more reliable tracking, and cleaner navigation. Several threaten to switch passes.' },
+];
+
+function renderOpportunities(themes) {
+  const el = document.getElementById('opps-list');
+  if (!el) return;
+  const TAG_LABELS = { bug: 'bug fix', ux: 'ux improvement', feature: 'new feature', intel: 'competitive intel' };
+  const themeByCategory = {};
+  for (const t of themes) {
+    if (!themeByCategory[t.def.category]) themeByCategory[t.def.category] = t;
+  }
+  const rows = [];
+  for (const def of OPP_DEFS) {
+    const theme = themeByCategory[def.category];
+    if (!theme) continue;
+    const quotes = def.filter ? theme.quotes.filter(def.filter) : theme.quotes;
+    if (!quotes.length) continue;
+    const allQuotesHtml = quotes.map(q => renderQuoteCard(q)).join('');
+    rows.push(`<div class="opp-item" onclick="this.classList.toggle('open')">
+      <div class="opp-num">${String(rows.length + 1).padStart(2, '0')}</div>
+      <div class="opp-body">
+        <div class="opp-title">${def.title}</div>
+        <div class="opp-desc">${def.desc}</div>
+        <div class="opp-meta">
+          <span class="opp-tag ${def.tag}">${TAG_LABELS[def.tag]}</span>
+          <span class="opp-mentions">${quotes.length} mention${quotes.length !== 1 ? 's' : ''}</span>
+          <span class="opp-expand">▸ expand reviews</span>
+        </div>
+        <div class="opp-quotes" style="max-height:480px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border2) var(--bg3)">${allQuotesHtml}</div>
+      </div>
+    </div>`);
+  }
+  if (!rows.length) { el.innerHTML = '<div style="color:var(--text3);font-size:12px;padding:12px 0">Not enough data for this period.</div>'; return; }
+  el.innerHTML = `<div class="opp-list">${rows.join('')}</div>`;
 }
 
 function renderDelta(currThemes, prevMap, recurringMap, hasPrev, currTotal) {
@@ -1438,7 +1732,7 @@ function renderDelta(currThemes, prevMap, recurringMap, hasPrev, currTotal) {
     return;
   }
   if (!hasPrev) {
-    container.innerHTML = `<div class="no-change">Select 7d, 14d, or 30d to compare against the previous period.</div>`;
+    container.innerHTML = `<div class="no-change">Select 14d or 30d to compare against the previous period.</div>`;
     return;
   }
 
@@ -1518,8 +1812,8 @@ function renderIssuesTable(currThemes, prevMap, recurringMap) {
       ? `<span class="weeks-badge">${rec.weeksElevated}w</span>`
       : '<span style="color:var(--text3)">—</span>';
 
-    const quotesHtml = theme.quotes.map(q =>
-      `<div class="quote-row">${q}</div>`).join('');
+    const quotesHtml = theme.quotes.slice(0,3).map(q =>
+      `<div class="quote-row">[${q.rating}★ · ${q.dateStr}] "${q.title}" — ${q.content}</div>`).join('');
 
     return `<tr class="issue-row" onclick="toggleQuotes(this)">
       <td class="rank">${i + 1}</td>
@@ -1588,7 +1882,7 @@ function renderCompetitive(range) {
 }
 
 function renderTrend(allReviews, weekBuckets) {
-  const defs = THEME_DEFS.filter(d => d.type !== 'positive' && d.type !== 'neutral');
+  const defs = CATEGORY_THEMES.filter(d => d.type !== 'positive' && d.type !== 'neutral');
   const rows = defs.map(def => {
     const pcts = weekBuckets.map(b => getThemePct(def, b));
     const hasData = pcts.some(p => p !== null && p > 0);
@@ -1629,14 +1923,7 @@ function selectWindow(win, el) {
   currentWindow = win;
   document.querySelectorAll('.win-btn').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
-  document.getElementById('custom-range').style.display = win === 'custom' ? 'flex' : 'none';
-  if (win !== 'custom') render();
-}
-
-function applyCustomRange() {
-  customStart = document.getElementById('custom-start').value;
-  customEnd = document.getElementById('custom-end').value;
-  if (customStart && customEnd) render();
+  render();
 }
 
 document.addEventListener('DOMContentLoaded', render);
