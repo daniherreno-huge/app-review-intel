@@ -132,7 +132,9 @@ def format_review_lines(reviews: list) -> str:
 def update_html(app_key: str, new_lines: str):
     html = HTML_PATH.read_text(encoding="utf-8")
 
-    pattern = rf"({re.escape(app_key)}:\s*`)(.*?)(`)"
+    # Match closing backtick only when followed by , or newline (JS object delimiter)
+    # to avoid truncating on backticks inside review text.
+    pattern = rf"({re.escape(app_key)}:\s*`)(.*?)(`(?=[,\n}}]))"
 
     def replacer(m):
         existing = m.group(2).strip()
