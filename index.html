@@ -539,6 +539,7 @@ body {
 .opp-tag.intel { background: rgba(74,158,218,0.12); color: #4a9eda; border: 1px solid rgba(74,158,218,0.3); }
 .opp-mentions { font-family: var(--font-mono); font-size: 10px; color: var(--text3); }
 .opp-expand { font-family: var(--font-mono); font-size: 10px; color: var(--text3); margin-left: auto; }
+.breakdown-group-label { font-family: var(--font-mono); font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; padding: 14px 0 6px; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
 .opp-quotes { display: none; margin-top: 12px; }
 .opp-item.open .opp-quotes { display: block; }
 .opp-item.open .opp-expand { display: none; }
@@ -644,6 +645,11 @@ body {
     </table>
   </div>
 
+  </div>
+
+  <div class="section-heading" onclick="toggleSection('breakdown-body',this)" style="cursor:pointer">feature breakdown <span class="sec-toggle">▸</span></div>
+  <div id="breakdown-body" style="display:none">
+    <div id="breakdown-list"></div>
   </div>
 
   <div class="section-heading" onclick="toggleSection('opps-body',this)" style="cursor:pointer">top opportunities <span class="sec-toggle">▾</span></div>
@@ -2086,6 +2092,7 @@ function render() {
   renderAllReviewsList(curr);
   renderDigest(curr, currThemes);
   renderOpportunities(currThemes);
+  renderBreakdown(curr);
   renderDelta(currThemes, prevMap, recurringMap, !!range.prev, curr.length);
   renderIssuesTable(currThemes, prevMap, recurringMap);
   renderCompetitive(range);
@@ -2282,7 +2289,7 @@ function renderOpportunities(themes) {
           <span class="opp-mentions">${quotes.length} mention${quotes.length !== 1 ? 's' : ''}</span>
           <span class="opp-expand">▸ expand reviews</span>
         </div>
-        <div class="opp-quotes" style="max-height:480px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border2) var(--bg3)">${allQuotesHtml}</div>
+        <div class="opp-quotes" onclick="event.stopPropagation()" style="max-height:480px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border2) var(--bg3)">${allQuotesHtml}</div>
       </div>
     </div>`);
   }
@@ -2355,6 +2362,74 @@ function renderDelta(currThemes, prevMap, recurringMap, hasPrev, currTotal) {
   }
   if (!html) html = `<div class="no-change">No significant changes from the previous period.</div>`;
   container.innerHTML = html;
+}
+
+const BREAKDOWN_DEFS = [
+  { group: 'Crashes', name: 'Pass activation & photo upload', cat: 'crash', kw: ['activat','photo','picture','uploading','face verif','profile pic'] },
+  { group: 'Crashes', name: 'Login & session timeouts', cat: 'crash', kw: ['log out','logout','logged out','session','sign in','password','locked out'] },
+  { group: 'Crashes', name: 'Purchase flow crash', cat: 'crash', kw: ['buy','purchas','ticket','gear','rental','reservation'] },
+  { group: 'Crashes', name: 'White screen / never loads', cat: 'crash', kw: ['white screen','blank screen','never load','won\'t load','just sits','nothing loads','doesn\'t load'] },
+  { group: 'Crashes', name: 'Tracking & GPS crash', cat: 'crash', kw: ['tracking','gps','stats','record'] },
+  { group: 'Bad UX', name: 'Purchase flow — app redirects to web, signs you out', cat: 'bad_ux', kw: ['buy','purchas','website','redirect','checkout','cart','call in','sign out','signed out'] },
+  { group: 'Bad UX', name: 'Login & persistent session friction', cat: 'bad_ux', kw: ['login','log in','log out','sign in','password','locked','session','won\'t let me login'] },
+  { group: 'Bad UX', name: 'Can\'t find pass details or blackout dates', cat: 'bad_ux', kw: ['blackout','confus','can\'t find','hard to find','buried','which resort','where is','navigat'] },
+  { group: 'Bad UX', name: 'Inaccurate real-time info (lifts, snow, grooming)', cat: 'bad_ux', kw: ['inaccurat','wrong','incorrect','outdated','not updat','lie','false','says closed','says open'] },
+  { group: 'Pass Display', name: 'Pass requires internet — fails without signal', cat: 'pass_display', kw: ['internet','wifi','offline','signal','connection','no service','cellular','connectivity'] },
+  { group: 'Pass Display', name: 'Random logouts at the gate', cat: 'pass_display', kw: ['log out','logout','logged out','sign out','constantly log'] },
+  { group: 'Pass Display', name: 'Pass not showing even when active', cat: 'pass_display', kw: ['not show','won\'t show','not load','not active','can\'t find','doesn\'t show','not valid'] },
+  { group: 'GPS & Stats', name: 'Vertical / distance inaccurate', cat: 'gps_tracking', kw: ['vertical','distance','vert','inaccurat','wrong','miles','feet','not accurate'] },
+  { group: 'GPS & Stats', name: 'Find My Friends not working', cat: 'gps_tracking', kw: ['friend','group','location shar','find my','not available'] },
+  { group: 'GPS & Stats', name: 'Full day stats lost after session', cat: 'gps_tracking', kw: ['not record','didn\'t record','lost','missing','gone','disappear','no stats','didn\'t log','not log'] },
+  { group: 'GPS & Stats', name: 'Battery drain from GPS tracking', cat: 'gps_tracking', kw: ['battery','drain','power'] },
+  { group: 'Feature Requests', name: 'Stats export / Strava integration', kw: ['strava','export','integrat'] },
+  { group: 'Feature Requests', name: 'Weather forecast (not just past conditions)', kw: ['forecast','future','which mountain','best snow','conditions ahead'] },
+  { group: 'Feature Requests', name: 'Map of trails skied', kw: ['trail','map','skied','runs skied','which trails','trail tracking'] },
+  { group: 'Feature Requests', name: 'Top speed stat', kw: ['speed','fast','mph','how fast'] },
+  { group: 'Feature Requests', name: 'Family pass day-count visibility', kw: ['family','kids','children','dependent','days left','how many days','head of household'] },
+  { group: 'Feature Requests', name: 'In-app reservations', kw: ['reservation','reserve','booking','book'] },
+  { group: 'Feature Requests', name: 'Real-time lift closure push alerts', kw: ['instagram','push','alert','notif','closed gondola','lift closure'] },
+  { group: 'Competitors', name: 'Slopes app — better tracking', kw: ['slopes app','using slopes','run slopes','slopes is','the slopes app'] },
+  { group: 'Competitors', name: 'Strava — better stats', kw: ['strava'] },
+  { group: 'Competitors', name: 'Ikon app — held up as better experience', kw: ['ikon app','compared to ikon','ikon is better','switching to ikon','ikon pass app'] },
+  { group: 'Competitors', name: 'Other apps mentioned (Killington, Peak Live, We Ski)', kw: ['killington','peak live','we ski','epicmix','onthesnow'] },
+];
+
+function renderBreakdown(reviews) {
+  const el = document.getElementById('breakdown-list');
+  if (!el) return;
+
+  // group defs
+  const groups = {};
+  for (const def of BREAKDOWN_DEFS) {
+    if (!groups[def.group]) groups[def.group] = [];
+    groups[def.group].push(def);
+  }
+
+  let html = '';
+  for (const [group, defs] of Object.entries(groups)) {
+    html += `<div class="breakdown-group-label">${group}</div>`;
+    for (const def of defs) {
+      const matched = reviews.filter(r => {
+        const catOk = !def.cat || r.category === def.cat;
+        const kwOk = def.kw.some(k => r.full && r.full.includes(k.toLowerCase()));
+        return catOk && kwOk && r.content && r.content.length > 10;
+      });
+      if (!matched.length) continue;
+      const sorted = [...matched].sort((a, b) => b.date - a.date);
+      const quotesHtml = sorted.map(q => `<div class="quote-row">[${q.rating}★ · ${q.dateStr}] "${q.title}" — ${q.content}</div>`).join('');
+      html += `<div class="opp-item" onclick="this.classList.toggle('open')">
+        <div class="opp-body">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="opp-title">${def.name}</span>
+            <span class="opp-mentions">${matched.length} review${matched.length !== 1 ? 's' : ''}</span>
+            <span class="opp-expand" style="margin-left:auto">▸ expand</span>
+          </div>
+          <div class="opp-quotes" onclick="event.stopPropagation()" style="max-height:400px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border2) var(--bg3);margin-top:10px">${quotesHtml}</div>
+        </div>
+      </div>`;
+    }
+  }
+  el.innerHTML = html || '<div style="color:var(--text3);font-size:12px;padding:12px 0">Not enough data for this period.</div>';
 }
 
 function renderIssuesTable(currThemes, prevMap, recurringMap) {
