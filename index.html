@@ -700,7 +700,8 @@ body {
 
 <script>
 const appData = {
-  vail: `★☆☆☆☆ | 2026-05-08 | John Parris | Crashed as I was trying to install | crash
+  vail: `★☆☆☆☆ | 2026-06-27 | Shameful that this app is so bad | Vail resorts has had plenty of time to improve this app yet from the beginning to the current version it continues to be the worst app of any major entertainment out outdoor activity skiing biking app | ios
+★☆☆☆☆ | 2026-05-08 | John Parris | Crashed as I was trying to install | crash
 ★★★★☆ | 2026-04-27 | Great mountains to ski✝️ | Five star👍 | positive
 ★★★★★ | 2026-04-27 | Love this! | So convenient to check out what runs are open in my favorite resorts. | positive
 ★★☆☆☆ | 2026-04-26 | Annoying to buy an epic pass | When trying to buy the epic pass, it doesn't work in the website or app, and you have to call in to purchase it. | bad_ux
@@ -1601,7 +1602,8 @@ const appData = {
 ★☆☆☆☆ | 2025-08-09 | No stats | I liked the app until it stop counting my vert. | gps_tracking
 ★☆☆☆☆ | 2025-08-05 | Hui Li | terrible app. the payment online option never worked for me. | bad_ux
 ★☆☆☆☆ | 2025-08-04 | Brandon Hintzman | completely useless. epic failure | none`,
-  ikon: `★★★★★ | 2026-05-01 | Open runs filter | I decided to try Ikon Pass instead of Epic Pass this year, and overall I really like the app. The interface is clean, easy to use, and everything feels well designed. | positive
+  ikon: `★☆☆☆☆ | 2026-06-25 | No trail maps??? | The app seems to have removed the ability to view trail maps at Palisades, at least in the offseason, replacing it with only their awful “3D” map that you could get a better version of in any other all-purpose mapping app. The only thing I used this app for was trail maps. Is this someone’s idea of a joke? | ios
+★★★★★ | 2026-05-01 | Open runs filter | I decided to try Ikon Pass instead of Epic Pass this year, and overall I really like the app. The interface is clean, easy to use, and everything feels well designed. | positive
 ★★☆☆☆ | 2026-04-16 | Horrible | Clunky, tries to be all things and isn’t. Not geared to how customers want their information. | bad_ux
 ★☆☆☆☆ | 2026-04-15 | Bo Li | I got stranded. Absolutely horrible app and business practice. The app was not showing how many days I'd left, and it was showing me that I had only five days tracked in Snowbird Alta and ruined my trip by not letting me scan in when I had zero days left, and I had no way to track it. On the app, it was showing me that five days were scanned, but I had zero days left, and actually tried to scan. And when I called them, I was on the phone for two hours until I got in, and they weren't able to do | pass_display
 ★☆☆☆☆ | 2026-04-15 | Madeline Thompson | so disappointed in this app. I just want to quickly open it and see lift statuses and ops updates but I have to click through multiple screens to get there even if I save it to my favorites. it would be great to have an Ikon Lite or something that just has lift/trail/mountain report. also when you load the map it automatically displays the lodges instead of trails. feels like it's more catered to getting people to spend money than creating a good experience for people who actually ski/ride. | bad_ux
@@ -1917,7 +1919,7 @@ function getAllReviews(appKey) {
 }
 
 const KNOWN_PLATFORMS = new Set(['ios', 'android']);
-const KNOWN_CATEGORIES = new Set(['none','pass_display','crash','gps_tracking','regression','bad_ux','positive','notification_spam','slow_performance','competitor_better','feature_request']);
+const KNOWN_CATEGORIES = new Set(['none','pass_display','crash','gps_tracking','regression','bad_ux','positive','notification_spam','slow_performance','competitor_better','feature_request','find_my_friends','stats_inaccurate','pass_offline','crash_onboarding','purchase_broken','login_issues','lift_info_wrong']);
 
 function parseReviews(text) {
   const reviews = [];
@@ -1983,13 +1985,13 @@ function getDateRange() {
 
 // ─── Theme definitions ───────────────────────────────────────────────────────
 const CATEGORY_THEMES = [
-  { name: 'Crashes & Broken Updates', category: 'crash',            type: 'critical', ticketType: 'Bug' },
-  { name: 'GPS & Stat Tracking',      category: 'gps_tracking',     type: 'critical', ticketType: 'Bug' },
-  { name: 'Pass & Lift Scanning',     category: 'pass_display',     type: 'critical', ticketType: 'Bug' },
+  { name: 'Crashes & Broken Updates', category: 'crash',            extraCategories: ['crash_onboarding','purchase_broken','login_issues'], type: 'critical', ticketType: 'Bug' },
+  { name: 'GPS & Stat Tracking',      category: 'gps_tracking',     extraCategories: ['find_my_friends','stats_inaccurate'],                type: 'critical', ticketType: 'Bug' },
+  { name: 'Pass & Lift Scanning',     category: 'pass_display',     extraCategories: ['pass_offline'],                                      type: 'critical', ticketType: 'Bug' },
   { name: 'Regressions',              category: 'regression',       type: 'critical', ticketType: 'Bug' },
   { name: 'Push Notifications',       category: 'notification_spam',type: 'critical', ticketType: 'Bug' },
   { name: 'Slow Performance',         category: 'slow_performance', type: 'friction', ticketType: 'Story' },
-  { name: 'UI/UX & Navigation',       category: 'bad_ux',           type: 'friction', ticketType: 'Story' },
+  { name: 'UI/UX & Navigation',       category: 'bad_ux',           extraCategories: ['lift_info_wrong'],                                   type: 'friction', ticketType: 'Story' },
   { name: 'Feature Requests',         category: 'feature_request',  type: 'neutral',  ticketType: 'Story' },
   { name: 'Competitor Mentions',      category: 'competitor_better',type: 'neutral',  ticketType: null },
   { name: 'Positive Experience',      category: 'positive',         type: 'positive', ticketType: null },
@@ -2000,7 +2002,8 @@ function analyzeThemes(reviews) {
   if (!total) return [];
   const results = [];
   for (const def of CATEGORY_THEMES) {
-    const matched = reviews.filter(r => r.category === def.category);
+    const allCats = [def.category, ...(def.extraCategories || [])];
+    const matched = reviews.filter(r => allCats.includes(r.category));
     if (!matched.length) continue;
     const quotes = matched.filter(r => r.content.length > 20)
       .map(r => ({ rating: r.rating, dateStr: r.dateStr, title: r.title, content: r.content, platform: r.platform }));
@@ -2026,7 +2029,8 @@ function getWeekBuckets(allReviews, n = 8) {
 
 function getThemePct(def, bucket) {
   if (bucket.total < 3) return null;
-  return bucket.reviews.filter(r => r.category === def.category).length / bucket.total;
+  const allCats = [def.category, ...(def.extraCategories || [])];
+  return bucket.reviews.filter(r => allCats.includes(r.category)).length / bucket.total;
 }
 
 function getRecurringInfo(def, weekBuckets) {
@@ -2365,33 +2369,22 @@ function renderDelta(currThemes, prevMap, recurringMap, hasPrev, currTotal) {
 }
 
 const BREAKDOWN_DEFS = [
-  { group: 'Crashes', name: 'Pass activation & photo upload', cat: 'crash', kw: ['activat','photo','picture','uploading','face verif','profile pic'] },
-  { group: 'Crashes', name: 'Login & session timeouts', cat: 'crash', kw: ['log out','logout','logged out','session','sign in','password','locked out'] },
-  { group: 'Crashes', name: 'Purchase flow crash', cat: 'crash', kw: ['buy','purchas','ticket','gear','rental','reservation'] },
-  { group: 'Crashes', name: 'White screen / never loads', cat: 'crash', kw: ['white screen','blank screen','never load','won\'t load','just sits','nothing loads','doesn\'t load'] },
-  { group: 'Crashes', name: 'Tracking & GPS crash', cat: 'crash', kw: ['tracking','gps','stats','record'] },
-  { group: 'Bad UX', name: 'Purchase flow — app redirects to web, signs you out', cat: 'bad_ux', kw: ['buy','purchas','website','redirect','checkout','cart','call in','sign out','signed out'] },
-  { group: 'Bad UX', name: 'Login & persistent session friction', cat: 'bad_ux', kw: ['login','log in','log out','sign in','password','locked','session','won\'t let me login'] },
-  { group: 'Bad UX', name: 'Can\'t find pass details or blackout dates', cat: 'bad_ux', kw: ['blackout','confus','can\'t find','hard to find','buried','which resort','where is','navigat'] },
-  { group: 'Bad UX', name: 'Inaccurate real-time info (lifts, snow, grooming)', cat: 'bad_ux', kw: ['inaccurat','wrong','incorrect','outdated','not updat','lie','false','says closed','says open'] },
-  { group: 'Pass Display', name: 'Pass requires internet — fails without signal', cat: 'pass_display', kw: ['internet','wifi','offline','signal','connection','no service','cellular','connectivity'] },
-  { group: 'Pass Display', name: 'Random logouts at the gate', cat: 'pass_display', kw: ['log out','logout','logged out','sign out','constantly log'] },
-  { group: 'Pass Display', name: 'Pass not showing even when active', cat: 'pass_display', kw: ['not show','won\'t show','not load','not active','can\'t find','doesn\'t show','not valid'] },
-  { group: 'GPS & Stats', name: 'Vertical / distance inaccurate', cat: 'gps_tracking', kw: ['vertical','distance','vert','inaccurat','wrong','miles','feet','not accurate'] },
-  { group: 'GPS & Stats', name: 'Find My Friends not working', kw: ['find my friend','friends don\'t show','friends feature','friend tracking','friend locator','add friends','tracking friends','can\'t add friend','cannot add friend','friends show','friends wrong','friend unavailable','friend disconnect','friends not work','friends broken','friend not active','friends not active'] },
-  { group: 'GPS & Stats', name: 'Full day stats lost after session', cat: 'gps_tracking', kw: ['not record','didn\'t record','lost','missing','gone','disappear','no stats','didn\'t log','not log'] },
-  { group: 'GPS & Stats', name: 'Battery drain from GPS tracking', cat: 'gps_tracking', kw: ['battery','drain','power'] },
-  { group: 'Feature Requests', name: 'Stats export / Strava integration', kw: ['strava','export','integrat'] },
-  { group: 'Feature Requests', name: 'Weather forecast (not just past conditions)', kw: ['forecast','future','which mountain','best snow','conditions ahead'] },
-  { group: 'Feature Requests', name: 'Map of trails skied', kw: ['trail','map','skied','runs skied','which trails','trail tracking'] },
-  { group: 'Feature Requests', name: 'Top speed stat', kw: ['speed','fast','mph','how fast'] },
-  { group: 'Feature Requests', name: 'Family pass day-count visibility', kw: ['family','kids','children','dependent','days left','how many days','head of household'] },
-  { group: 'Feature Requests', name: 'In-app reservations', kw: ['reservation','reserve','booking','book'] },
-  { group: 'Feature Requests', name: 'Real-time lift closure push alerts', kw: ['instagram','push','alert','notif','closed gondola','lift closure'] },
-  { group: 'Competitors', name: 'Slopes app — better tracking', kw: ['slopes app','using slopes','run slopes','slopes is','the slopes app'] },
-  { group: 'Competitors', name: 'Strava — better stats', kw: ['strava'] },
-  { group: 'Competitors', name: 'Ikon app — held up as better experience', kw: ['ikon app','compared to ikon','ikon is better','switching to ikon','ikon pass app'] },
-  { group: 'Competitors', name: 'Other apps mentioned (Killington, Peak Live, We Ski)', kw: ['killington','peak live','we ski','epicmix','onthesnow'] },
+  { group: 'Crashes', name: 'Pass activation & photo upload', category: 'crash_onboarding' },
+  { group: 'Crashes', name: 'Purchase flow crash', category: 'purchase_broken' },
+  { group: 'Crashes', name: 'Login & session timeouts', category: 'login_issues' },
+  { group: 'GPS & Stats', name: 'Find My Friends not working', category: 'find_my_friends' },
+  { group: 'GPS & Stats', name: 'Vertical / distance inaccurate', category: 'stats_inaccurate' },
+  { group: 'Pass Display', name: 'Pass requires internet — fails offline', category: 'pass_offline' },
+  { group: 'Bad UX', name: 'Inaccurate lift status & snow reports', category: 'lift_info_wrong' },
+  { group: 'Feature Requests', name: 'Stats export / Strava integration', category: 'feature_request', kw: ['strava','export','integrat'] },
+  { group: 'Feature Requests', name: 'Weather forecast (not just past conditions)', category: 'feature_request', kw: ['forecast','future','which mountain','best snow','conditions ahead'] },
+  { group: 'Feature Requests', name: 'Map of trails skied', category: 'feature_request', kw: ['trail map','skied','runs skied','which trails','trail tracking'] },
+  { group: 'Feature Requests', name: 'Top speed stat', category: 'feature_request', kw: ['speed','fast','mph','how fast'] },
+  { group: 'Feature Requests', name: 'Family pass day-count visibility', category: 'feature_request', kw: ['family','kids','children','dependent','days left','how many days','head of household'] },
+  { group: 'Feature Requests', name: 'In-app reservations', category: 'feature_request', kw: ['reservation','reserve','booking','book'] },
+  { group: 'Competitors', name: 'Slopes app — better tracking', category: 'competitor_better', kw: ['slopes app','using slopes','run slopes','slopes is','the slopes app'] },
+  { group: 'Competitors', name: 'Strava — better stats', category: 'competitor_better', kw: ['strava'] },
+  { group: 'Competitors', name: 'Ikon app — held up as better experience', category: 'competitor_better', kw: ['ikon app','compared to ikon','ikon is better','switching to ikon','ikon pass app'] },
 ];
 
 function renderBreakdown(reviews) {
@@ -2410,9 +2403,9 @@ function renderBreakdown(reviews) {
     html += `<div class="breakdown-group-label">${group}</div>`;
     for (const def of defs) {
       const matched = reviews.filter(r => {
-        const catOk = !def.cat || r.category === def.cat;
-        const kwOk = def.kw.some(k => r.full && r.full.includes(k.toLowerCase()));
-        return catOk && kwOk && r.content && r.content.length > 10;
+        if (!r.content || r.content.length <= 10) return false;
+        if (!def.kw) return r.category === def.category;
+        return r.category === def.category && def.kw.some(k => r.full && r.full.includes(k.toLowerCase()));
       });
       if (!matched.length) continue;
       const sorted = [...matched].sort((a, b) => b.date - a.date);
