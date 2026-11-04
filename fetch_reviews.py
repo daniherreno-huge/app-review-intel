@@ -36,7 +36,7 @@ def stars(rating: int) -> str:
 
 def fetch_appstore_reviews(app_id: str, since_date) -> list:
     reviews = []
-    for page in range(1, 11):
+    for page in range(1, 31):
         url = (
             f"https://itunes.apple.com/us/rss/customerreviews/"
             f"page={page}/id={app_id}/sortBy=mostRecent/json"
@@ -95,7 +95,7 @@ def fetch_gplay_reviews(package_id: str, since_date) -> list:
             lang="en",
             country="us",
             sort=Sort.NEWEST,
-            count=200,
+            count=1000,
         )
         for entry in entries:
             date = entry["at"].date()
@@ -127,16 +127,15 @@ def format_review_lines(reviews: list) -> str:
         content = r["content"].replace("|", "-").replace("`", "'").strip()
         if not title and not content:
             continue
-        lines.append(f"{stars(r['rating'])} | {r['date']} | {title} | {content} | {r['platform']}")
+        platform = r.get("platform", "")
+        lines.append(f"{stars(r['rating'])} | {r['date']} | {title} | {content} | {platform}")
     return "\n".join(lines)
 
 
 def update_html(app_key: str, new_lines: str):
     html = HTML_PATH.read_text(encoding="utf-8")
 
-    # Match closing backtick only when followed by , or newline (JS object delimiter)
-    # to avoid truncating on backticks inside review text.
-    pattern = rf"({re.escape(app_key)}:\s*`)(.*?)(`(?=[,\n}}]))"
+    pattern = rf"({re.escape(app_key)}:\s*`)(.*?)(`)"
 
     def replacer(m):
         existing = m.group(2).strip()
@@ -189,7 +188,17 @@ def main():
         ["git", "-C", str(repo_dir), "commit", "-m", f"Weekly review update {today} — {total_new} new reviews"],
         check=False,
     )
-    subprocess.run(["git", "-C", str(repo_dir), "push"], check=False)
+    # Use daniherreno-huge token to avoid keychain auth mismatch
+    token_result = subprocess.run(
+        ["gh", "auth", "token", "--hostname", "github.com", "--user", "daniherreno-huge"],
+        capture_output=True, text=True,
+    )
+    token = token_result.stdout.strip()
+    if token:
+        push_url = f"https://daniherreno-huge:{token}@github.com/daniherreno-huge/app-review-intel.git"
+        subprocess.run(["git", "-C", str(repo_dir), "push", push_url, "main"], check=False)
+    else:
+        subprocess.run(["git", "-C", str(repo_dir), "push"], check=False)
     print("  Pushed to GitHub.")
 
     notify(
@@ -197,8 +206,7 @@ def main():
         f"{total_new} new reviews this week (Vail: {vail_n} · Ikon: {ikon_n}) — dashboard updated",
     )
 
-    dashboard = HTML_PATH.resolve()
-    subprocess.run(["open", str(dashboard)], check=False)
+    subprocess.run(["open", "https://daniherreno-huge.github.io/app-review-intel/"], check=False)
 
     print(f"\nDone. {total_new} new reviews. Dashboard opened.")
 
